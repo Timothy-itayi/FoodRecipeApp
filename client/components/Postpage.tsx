@@ -10,14 +10,13 @@ const PostPage = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    const recipe = {
+    const post = {
       title,
       description,
-      ingredients,
-      instructions,
+     
     };
     try {
-      await superagent.post('/api/recipes', recipe);
+      await superagent.post('/api/posts', post);
       // redirect to feed page or show success message
     } catch (error) {
       // handle error
@@ -36,14 +35,7 @@ const PostPage = () => {
           Description:
           <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
         </label>
-        <label>
-          Ingredients:
-          <textarea value={ingredients} onChange={(e) => setIngredients(e.target.value)} required />
-        </label>
-        <label>
-          Instructions:
-          <textarea value={instructions} onChange={(e) => setInstructions(e.target.value)} required />
-        </label>
+     
         <button type="submit">Submit</button>
       </form>
     </div>
