@@ -1,34 +1,32 @@
-import React, { useState } from "react";
-
+import React, { useState } from 'react'
 
 function SignUpForm() {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    
-  });
+    name: '',
+    email: '',
+  })
 
-  const handleChange = (e: { target: { name: any; value: any; }; }) => {
+  const handleChange = (e: { target: { name: any; value: any } }) => {
     setFormData((prevData) => ({
       ...prevData,
       [e.target.name]: e.target.value,
-    }));
-  };
+    }))
+  }
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    console.log(formData);
-  };
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault()
+    console.log(formData)
+  }
 
   return (
     <div className="signup-form-container">
       <h2>Sign Up</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="name">Name:</label>
+          <label htmlFor="Username">Username:</label>
           <input
             type="text"
-            name="name"
+            name="username"
             id="name"
             value={formData.name}
             onChange={handleChange}
@@ -54,12 +52,11 @@ function SignUpForm() {
             onChange={handleChange}
           />
         </div>
-     
-       
+
         <button type="submit">Sign Up</button>
       </form>
     </div>
-  );
+  )
 }
 
-export default SignUpForm;
+export default SignUpForm
