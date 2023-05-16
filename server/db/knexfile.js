@@ -23,6 +23,8 @@ module.exports = {
     },
     seeds: {
       directory: join(__dirname, 'seeds'),
+      // Specify the order of seed files in the database
+      order: ['users.js', 'posts.js'],
     },
     pool: {
       afterCreate: (conn, cb) => conn.run('PRAGMA foreign_keys = ON', cb),
