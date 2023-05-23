@@ -4,7 +4,8 @@ import CreateProfile from './components/CreateProfile'
 
 import Header from './components/Header'
 import Footer from './components/Footer'
-import SignupForm from './components/SignupForm'
+
+import Nav from './components/Nav'
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       <div className="app">
         <h1>HelloFresh Twists</h1>
         <Header />
-        <SignupForm />
+        <Nav />
 
         <Footer />
       </div>
