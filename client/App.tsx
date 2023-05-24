@@ -6,14 +6,14 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 
 import Nav from './components/Nav'
+import MainFeed from './components/MainFeed'
 
 function App() {
   return (
     <>
       <div className="app">
-        <h1>HelloFresh Twists</h1>
         <Header />
-        <Nav />
+        <MainFeed />
 
         <Footer />
       </div>
