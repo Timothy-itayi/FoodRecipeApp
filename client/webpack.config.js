@@ -1,9 +1,9 @@
-const { join } = require('node:path')
+const path = require('path')
 
 module.exports = {
-  entry: ['/client/index.tsx'],
+  entry: ['./client/index.tsx'],
   output: {
-    path: join(__dirname, '..', 'server', 'public'),
+    path: path.join(__dirname, '..', 'server', 'public'),
     filename: 'bundle.js',
   },
   mode: 'development',
@@ -18,6 +18,10 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    alias: {
+      '@components': path.resolve(__dirname, 'client/components'),
+      // Add other aliases or custom paths as needed
+    },
   },
   devtool: 'source-map',
 }

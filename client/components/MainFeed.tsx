@@ -25,14 +25,14 @@ const posts: Post[] = [
       'add flour , sugar ,milk , baking powder with a few eggs and mix. leave to rest while you season your pan with oil .',
   },
   {
-    id: '4',
+    id: '3',
     imageUrl: 'flatbread01.jpeg',
     title: 'Post 3',
     description:
       'homemade pizza dough, chopped carrots ,onions, seasoned with salt and pepper with a drizzle of oil',
   },
   {
-    id: '3',
+    id: '4',
     imageUrl: 'breadbun.jpeg',
     title: 'Post 4',
     description: 'Stuffed bun.',
