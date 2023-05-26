@@ -1,11 +1,8 @@
 import React from 'react'
 
-import CreateProfile from './components/CreateProfile'
+import Header from './components/AdminComponents/Header'
+import Footer from './components/AdminComponents/Footer'
 
-import Header from './components/Header'
-import Footer from './components/Footer'
-
-import Nav from './components/Nav'
 import MainFeed from './components/MainFeed'
 
 function App() {
@@ -13,6 +10,7 @@ function App() {
     <>
       <div className="app">
         <Header />
+
         <MainFeed />
 
         <Footer />
