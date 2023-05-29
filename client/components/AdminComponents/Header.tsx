@@ -43,9 +43,12 @@ const Header = () => {
   return (
     <header className="header-container">
       <h1 className="header-title">
-        Flavorful Recipes: "Embrace the Art of Flavorful Cooking"
+        <img className="logo" src="/logo.jpeg"></img>
+        "Embrace the Art of Flavorful cooking"
       </h1>
+
       <Nav />
+
       <nav className="main-nav">
         <ul className="nav-list">
           <li className="nav-item">
