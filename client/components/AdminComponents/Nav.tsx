@@ -2,8 +2,12 @@ import React from 'react'
 import { IfAuthenticated, IfNotAuthenticated } from '../Authenticated'
 import { NavGroup, NavButton } from '../Styled'
 import { useAuth0 } from '@auth0/auth0-react'
+interface NavProps {
+  isAuthenticated: boolean
+  userName: string
+}
 
-function Nav() {
+const Nav: React.FC<NavProps> = ({ isAuthenticated }) => {
   const { logout, loginWithRedirect, user } = useAuth0()
 
   const handleSignOut = () => {
@@ -18,13 +22,18 @@ function Nav() {
 
   return (
     <>
+      <img className="logo" src="/logo.jpeg"></img>
       <NavGroup className="beige-nav">
         <IfAuthenticated>
-          <NavButton onClick={handleSignOut}>Sign out</NavButton>
+          <NavButton role="button" name="Sign out" onClick={handleSignOut}>
+            Sign out
+          </NavButton>
           {user && <p>Signed in as: {user?.name}</p>}
         </IfAuthenticated>
         <IfNotAuthenticated>
-          <NavButton onClick={handleSignIn}>Sign in</NavButton>
+          <NavButton role="button" name="Sign in" onClick={handleSignIn}>
+            Sign in
+          </NavButton>
         </IfNotAuthenticated>
       </NavGroup>
     </>

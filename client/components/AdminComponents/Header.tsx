@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { IfAuthenticated, IfNotAuthenticated } from '../Authenticated'
 import { NavGroup, NavButton } from '../Styled'
 import { useAuth0 } from '@auth0/auth0-react'
+import About from './About'
 
 const Nav = () => {
   const { logout, loginWithRedirect, user } = useAuth0()
@@ -32,31 +34,41 @@ const Nav = () => {
 }
 
 const Header = () => {
+  const [showAbout, setShowAbout] = useState(false)
+
+  const toggleAbout = () => {
+    setShowAbout((prevState) => !prevState)
+  }
+
   return (
     <header className="header-container">
       <h1 className="header-title">
-        Flavorful Recipes: "Embrace the Art of Flavorful Cooking"
+        <img className="logo" src="/logo.jpeg"></img>
+        "Embrace the Art of Flavorful cooking"
       </h1>
+
       <Nav />
+
       <nav className="main-nav">
         <ul className="nav-list">
           <li className="nav-item">
-            <a href="/" className="nav-link">
+            <Link to="/" className="nav-link">
               Home
-            </a>
+            </Link>
           </li>
           <li className="nav-item">
-            <a href="/about" className="nav-link">
+            <a href="#" className="nav-link" onClick={toggleAbout}>
               About
             </a>
           </li>
           <li className="nav-item">
-            <a href="/contact" className="nav-link">
+            <Link to="/contact" className="nav-link">
               Contact
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>
+      {showAbout && <About />}
     </header>
   )
 }
