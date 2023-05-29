@@ -13,28 +13,28 @@ const posts: Post[] = [
   {
     id: '1',
     imageUrl: 'pizzabread.jpeg',
-    title: 'Post 1',
+    title: 'Pizzabread',
     description:
       'homemade pizza dough, chopped tomatoes , bacon , feta cheese , basil  , seasoned with salt and pepper with a drizzle of oil',
   },
   {
     id: '2',
     imageUrl: 'pancakes.jpeg',
-    title: 'Post 2',
+    title: 'Pancakes',
     description:
       'add flour , sugar ,milk , baking powder with a few eggs and mix. leave to rest while you season your pan with oil .',
   },
   {
     id: '3',
     imageUrl: 'flatbread01.jpeg',
-    title: 'Post 3',
+    title: 'Veggie Flatbread',
     description:
       'homemade pizza dough, chopped carrots ,onions, seasoned with salt and pepper with a drizzle of oil',
   },
   {
     id: '4',
     imageUrl: 'breadbun.jpeg',
-    title: 'Post 4',
+    title: 'Bread Bun',
     description: 'Stuffed bun.',
   },
   // Add more posts here
