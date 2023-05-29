@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import superagent from 'superagent'
 
 interface Post {
   id: number
   title: string
   description: string
   user_id: number
+  image: File | null
 }
 
 const UserPosts: React.FC = () => {
@@ -14,6 +16,7 @@ const UserPosts: React.FC = () => {
     title: '',
     description: '',
     user_id: 0,
+    image: null,
   })
   const [editPost, setEditPost] = useState<Post | null>(null)
 
@@ -27,33 +30,86 @@ const UserPosts: React.FC = () => {
     setNewPost({ ...newPost, description: e.target.value })
   }
 
-  const handleCreatePost = () => {
-    // Generate a unique ID for the new post
-    const newId = Math.max(0, ...posts.map((post) => post.id)) + 1
-    const newPostWithId = { ...newPost, id: newId }
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files && files.length > 0) {
+      const image = files[0]
+      setNewPost({ ...newPost, image })
+    }
+  }
 
-    setPosts([...posts, newPostWithId])
-    setNewPost({ id: 0, title: '', description: '', user_id: 0 })
+  const handleCreatePost = async () => {
+    try {
+      const { title, description, image } = newPost
+
+      const formData = new FormData()
+      formData.append('title', title)
+      formData.append('description', description)
+      if (image) {
+        formData.append('image', image)
+      }
+
+      const response = await superagent
+        .post('/api/posts')
+        .send(formData)
+        .set('Accept', 'application/json')
+
+      const newPostWithId = { ...response.body, id: response.body.id }
+
+      setPosts([...posts, newPostWithId])
+      setNewPost({
+        id: 0,
+        title: '',
+        description: '',
+        user_id: 0,
+        image: null,
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const handleEditPost = (post: Post) => {
     setEditPost(post)
   }
 
-  const handleUpdatePost = () => {
+  const handleUpdatePost = async () => {
     if (editPost) {
-      const updatedPosts = posts.map((post) =>
-        post.id === editPost.id ? editPost : post
-      )
+      try {
+        const { id, title, description, image } = editPost
 
-      setPosts(updatedPosts)
-      setEditPost(null)
+        const formData = new FormData()
+        formData.append('title', title)
+        formData.append('description', description)
+        if (image) {
+          formData.append('image', image)
+        }
+
+        const response = await superagent
+          .put(`/api/posts/${id}`)
+          .send(formData)
+          .set('Accept', 'application/json')
+
+        const updatedPosts = posts.map((post) =>
+          post.id === id ? response.body : post
+        )
+
+        setPosts(updatedPosts)
+        setEditPost(null)
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 
-  const handleDeletePost = (id: number) => {
-    const updatedPosts = posts.filter((post) => post.id !== id)
-    setPosts(updatedPosts)
+  const handleDeletePost = async (id: number) => {
+    try {
+      await superagent.delete(`/api/posts/${id}`)
+      const updatedPosts = posts.filter((post) => post.id !== id)
+      setPosts(updatedPosts)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -72,6 +128,7 @@ const UserPosts: React.FC = () => {
         value={newPost.description}
         onChange={handleDescriptionChange}
       />
+      <input type="file" accept="image/*" onChange={handleImageChange} />
       <button onClick={handleCreatePost}>Create Post</button>
 
       <h3>Existing Posts</h3>
@@ -79,6 +136,9 @@ const UserPosts: React.FC = () => {
         <div key={post.id}>
           <h4>{post.title}</h4>
           <p>{post.description}</p>
+          {post.image && (
+            <img src={URL.createObjectURL(post.image)} alt="Post" />
+          )}
           <button onClick={() => handleEditPost(post)}>Edit</button>
           <button onClick={() => handleDeletePost(post.id)}>Delete</button>
         </div>
@@ -98,6 +158,13 @@ const UserPosts: React.FC = () => {
             value={editPost.description}
             onChange={(e) =>
               setEditPost({ ...editPost, description: e.target.value })
+            }
+          />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) =>
+              setEditPost({ ...editPost, image: e.target.files?.[0] || null })
             }
           />
           <button onClick={handleUpdatePost}>Update Post</button>

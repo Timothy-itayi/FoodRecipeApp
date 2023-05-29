@@ -2,6 +2,7 @@ import React from 'react'
 import { IfAuthenticated, IfNotAuthenticated } from '../Authenticated'
 import { NavGroup, NavButton } from '../Styled'
 import { useAuth0 } from '@auth0/auth0-react'
+
 interface NavProps {
   isAuthenticated: boolean
   userName: string
