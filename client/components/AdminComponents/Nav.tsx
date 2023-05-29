@@ -22,7 +22,6 @@ const Nav: React.FC<NavProps> = ({ isAuthenticated }) => {
 
   return (
     <>
-      <img className="logo" src="/logo.jpeg"></img>
       <NavGroup className="beige-nav">
         <IfAuthenticated>
           <NavButton role="button" name="Sign out" onClick={handleSignOut}>
