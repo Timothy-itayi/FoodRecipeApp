@@ -9,6 +9,7 @@ export interface Post {
   title: string
   description: string
   user_id: number
+  image_url: string
 }
 
 export async function getAllPosts(db = connection) {
@@ -17,7 +18,8 @@ export async function getAllPosts(db = connection) {
       'id',
       'title',
       'description',
-      'user_id'
+      'user_id',
+      'image_url'
     )
     console.log(posts)
     return posts
@@ -39,7 +41,12 @@ export async function getPost(id: number, res: Response, db = connection) {
 
 export function addNewPost(newPost: Post, db = connection) {
   return db<Post>('posts')
-    .insert(newPost)
+    .insert({
+      title: newPost.title,
+      description: newPost.description,
+      user_id: newPost.user_id,
+      image_url: newPost.image_url,
+    })
     .then((id: number[]) => id[0])
 }
 
@@ -53,4 +60,12 @@ export function updatePost(
 
 export function deletePost(id: number, db = connection) {
   return db<Post>('posts').where('id', id).delete()
+}
+
+export default {
+  getAllPosts,
+  getPost,
+  addNewPost,
+  updatePost,
+  deletePost,
 }
