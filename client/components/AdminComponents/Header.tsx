@@ -5,34 +5,6 @@ import { NavGroup, NavButton } from '../Styled'
 import { useAuth0 } from '@auth0/auth0-react'
 import About from './About'
 
-const Nav = () => {
-  const { logout, loginWithRedirect, user } = useAuth0()
-
-  const handleSignOut = () => {
-    console.log('sign out')
-    logout()
-  }
-
-  const handleSignIn = () => {
-    console.log('sign in')
-    loginWithRedirect()
-  }
-
-  return (
-    <nav className="nav-container">
-      <NavGroup>
-        <IfAuthenticated>
-          <NavButton onClick={handleSignOut}>Sign out</NavButton>
-          {user && <p>Signed in as: {user?.name}</p>}
-        </IfAuthenticated>
-        <IfNotAuthenticated>
-          <NavButton onClick={handleSignIn}>Sign in</NavButton>
-        </IfNotAuthenticated>
-      </NavGroup>
-    </nav>
-  )
-}
-
 const Header = () => {
   const [showAbout, setShowAbout] = useState(false)
 
@@ -46,8 +18,6 @@ const Header = () => {
         <img className="logo" src="/logo.jpeg"></img>
         "Embrace the Art of Flavorful cooking"
       </h1>
-
-      <Nav />
 
       <nav className="main-nav">
         <ul className="nav-list">

@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer role="footer" className="footer-container">
       <div>
-        <img className="logo" src="/footer.jpg" alt="Footer Logo" />
+        <img className="logo" src="/footer.jpg" alt=" Logo" />
       </div>
       <div>
         <p>&copy; 2023 MyWebsite. All rights reserved.</p>

@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, ChangeEvent } from 'react'
+import { addNewPost, updatePost, deletePost } from '../apis/posts'
 
 interface Post {
   id: number
   title: string
   description: string
   user_id: number
+  image_url: string | null
 }
 
 const UserPosts: React.FC = () => {
@@ -14,46 +16,73 @@ const UserPosts: React.FC = () => {
     title: '',
     description: '',
     user_id: 0,
+    image_url: null,
   })
   const [editPost, setEditPost] = useState<Post | null>(null)
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewPost({ ...newPost, title: e.target.value })
   }
 
-  const handleDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
+  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewPost({ ...newPost, description: e.target.value })
   }
 
-  const handleCreatePost = () => {
-    // Generate a unique ID for the new post
-    const newId = Math.max(0, ...posts.map((post) => post.id)) + 1
-    const newPostWithId = { ...newPost, id: newId }
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files && files.length > 0) {
+      const image = files[0]
+      setNewPost({ ...newPost, image_url: URL.createObjectURL(image) })
+    }
+  }
 
-    setPosts([...posts, newPostWithId])
-    setNewPost({ id: 0, title: '', description: '', user_id: 0 })
+  const handleCreatePost = async () => {
+    try {
+      const { title, description, image_url } = newPost
+
+      const newPostId = await addNewPost({ title, description, image_url })
+
+      const newPostWithId = { ...newPost, id: newPostId }
+
+      setPosts([newPostWithId])
+      setNewPost({
+        id: 0,
+        title: '',
+        description: '',
+        user_id: 0,
+        image_url: null,
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const handleUpdatePost = async () => {
+    if (editPost) {
+      try {
+        const { id, title, description, image_url } = editPost
+
+        await updatePost(id, { title, description, image_url })
+
+        setPosts([editPost])
+        setEditPost(null)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
+  const handleDeletePost = async (id: number) => {
+    try {
+      await deletePost(id)
+      setPosts([])
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const handleEditPost = (post: Post) => {
     setEditPost(post)
-  }
-
-  const handleUpdatePost = () => {
-    if (editPost) {
-      const updatedPosts = posts.map((post) =>
-        post.id === editPost.id ? editPost : post
-      )
-
-      setPosts(updatedPosts)
-      setEditPost(null)
-    }
-  }
-
-  const handleDeletePost = (id: number) => {
-    const updatedPosts = posts.filter((post) => post.id !== id)
-    setPosts(updatedPosts)
   }
 
   return (
@@ -72,6 +101,7 @@ const UserPosts: React.FC = () => {
         value={newPost.description}
         onChange={handleDescriptionChange}
       />
+      <input type="file" accept="image/*" onChange={handleImageChange} />
       <button onClick={handleCreatePost}>Create Post</button>
 
       <h3>Existing Posts</h3>
@@ -79,6 +109,7 @@ const UserPosts: React.FC = () => {
         <div key={post.id}>
           <h4>{post.title}</h4>
           <p>{post.description}</p>
+          {post.image_url && <img src={post.image_url} alt="Post" />}
           <button onClick={() => handleEditPost(post)}>Edit</button>
           <button onClick={() => handleDeletePost(post.id)}>Delete</button>
         </div>
@@ -100,6 +131,7 @@ const UserPosts: React.FC = () => {
               setEditPost({ ...editPost, description: e.target.value })
             }
           />
+          <input type="file" accept="image/*" onChange={handleImageChange} />
           <button onClick={handleUpdatePost}>Update Post</button>
         </div>
       )}

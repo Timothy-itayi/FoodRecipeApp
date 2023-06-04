@@ -15,18 +15,33 @@ export function getPost(id: number): Promise<any> {
 }
 
 export function addNewPost(newPost: any): Promise<number> {
+  const { title, description, user_id, image_url } = newPost
+  const postData = {
+    title,
+    description,
+    user_id,
+    image_url,
+  }
+
   return request
     .post(rootUrl)
-    .send(newPost)
+    .send(postData)
     .then((res) => {
       return res.body.postId
     })
 }
 
 export function updatePost(id: number, updatedPost: any): Promise<void> {
+  const { title, description, image_url } = updatedPost
+  const postData = {
+    title,
+    description,
+    image_url,
+  }
+
   return request
     .put(`${rootUrl}/${id}`)
-    .send(updatedPost)
+    .send(postData)
     .then(() => {})
 }
 
