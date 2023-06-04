@@ -1,6 +1,7 @@
 import React from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
-import UserPosts from './UserPosts'
+
+import MainFeed from './MainFeed'
 
 const useIsAuthenticated = () => {
   const { isAuthenticated } = useAuth0() // Call the useAuth0 hook and destructure isAuthenticated
@@ -28,7 +29,7 @@ const Authenticated: React.FC = () => {
       <h1>Welcome, authenticated user!</h1>
 
       <IfAuthenticated>
-        <UserPosts />
+        <MainFeed posts={[]} />
       </IfAuthenticated>
     </div>
   )
