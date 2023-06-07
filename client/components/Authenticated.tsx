@@ -1,8 +1,6 @@
 import React from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 
-import MainFeed from './MainFeed'
-
 const useIsAuthenticated = () => {
   const { isAuthenticated } = useAuth0() // Call the useAuth0 hook and destructure isAuthenticated
   return isAuthenticated
@@ -23,16 +21,5 @@ export function IfNotAuthenticated(props: Props) {
 }
 
 // Example usage
-const Authenticated: React.FC = () => {
-  return (
-    <div>
-      <h1>Welcome, authenticated user!</h1>
 
-      <IfAuthenticated>
-        <MainFeed posts={[]} />
-      </IfAuthenticated>
-    </div>
-  )
-}
-
-export default Authenticated
+export default IfAuthenticated

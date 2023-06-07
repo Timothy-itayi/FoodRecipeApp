@@ -17,6 +17,10 @@ const App = () => {
     setIsUserAuthenticated(isAuthenticated)
   }, [isAuthenticated])
 
+  useEffect(() => {
+    console.log('Posts data:', postsData) // Log the posts data received from the backend
+  }, [postsData])
+
   return (
     <div>
       <Header />
@@ -25,31 +29,7 @@ const App = () => {
       ) : isUserAuthenticated ? (
         <>
           <PostFetcher setPostsData={setPostsData} />
-          {postsData.length > 0 ? (
-            <MainFeed posts={postsData} />
-          ) : (
-            <>
-              <MainFeed
-                posts={[
-                  {
-                    id: 1,
-                    title: 'Dummy Post 1',
-                    description: 'Lorem ipsum dolor sit amet.',
-                    user_id: 1,
-                    image_url: null,
-                  },
-                  {
-                    id: 2,
-                    title: 'Dummy Post 2',
-                    description: 'Consectetur adipiscing elit.',
-                    user_id: 2,
-                    image_url: null,
-                  },
-                  // Add more dummy posts as needed
-                ]}
-              />
-            </>
-          )}
+          <MainFeed posts={postsData} />
         </>
       ) : (
         <SignIn />
