@@ -10,8 +10,7 @@ const SignIn = () => {
 
   return (
     <div>
-      <h2>Sign In</h2>
-      <button onClick={handleSignIn}>Sign in with Auth0</button>
+      <button onClick={handleSignIn}>Sign in with Google</button>
     </div>
   )
 }

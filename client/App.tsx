@@ -6,7 +6,8 @@ import Footer from './components/AdminComponents/Footer'
 import { Post } from './components/types'
 import PostFetcher from './components/PostFetcher'
 import MainFeed from './components/MainFeed'
-import UserPosts from './components/UserPosts'
+import PostContainer from './components/PostContainer'
+import { deletePost } from './apis/posts'
 
 const App = () => {
   const { isAuthenticated, isLoading } = useAuth0()
@@ -21,6 +22,17 @@ const App = () => {
     console.log('Posts data:', postsData)
   }, [postsData])
 
+  const handleDeletePost = async (id: number) => {
+    try {
+      await deletePost(id)
+      console.log('Post deleted successfully:', id)
+      setPostsData((prevPostsData) =>
+        prevPostsData.filter((post) => post.id !== id)
+      )
+    } catch (error) {
+      console.error('Error deleting post:', error)
+    }
+  }
   return (
     <div>
       <Header />
@@ -28,15 +40,9 @@ const App = () => {
         <p>Loading...</p>
       ) : isUserAuthenticated ? (
         <>
-          {' '}
-          <UserPosts
-            handleCreatePost={() => console.log('Create post')}
-            handleUpdatePost={() => console.log('Update post')}
-            handleDeletePost={(id) => console.log('Delete post', id)}
-            handleEditPost={(post) => console.log('Edit post', post)}
-          />
+          <PostContainer />
           <PostFetcher setPostsData={setPostsData} />
-          <MainFeed posts={postsData} />
+          <MainFeed posts={postsData} handleDeletePost={handleDeletePost} />
         </>
       ) : (
         <SignIn />

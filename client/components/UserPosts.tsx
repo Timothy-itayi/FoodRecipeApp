@@ -6,14 +6,12 @@ interface UserPostsProps {
   handleCreatePost: () => void
   handleUpdatePost: () => void
   handleDeletePost: (id: number) => void
-  handleEditPost: (post: Post) => void
 }
 
 const UserPosts: React.FC<UserPostsProps> = ({
   handleCreatePost,
   handleUpdatePost,
   handleDeletePost,
-  handleEditPost,
 }) => {
   const [newPost, setNewPost] = useState<Post>({
     id: 0,
@@ -22,7 +20,6 @@ const UserPosts: React.FC<UserPostsProps> = ({
     user_id: 0,
     image_url: null,
   })
-  const [editPost, setEditPost] = useState<Post | null>(null)
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewPost({ ...newPost, title: e.target.value })
@@ -37,6 +34,33 @@ const UserPosts: React.FC<UserPostsProps> = ({
     if (files && files.length > 0) {
       const image = files[0]
       setNewPost({ ...newPost, image_url: URL.createObjectURL(image) })
+    }
+  }
+
+  const handleCreateButtonClick = async () => {
+    try {
+      await addNewPost(newPost)
+      console.log('new post added successfully', newPost)
+      handleCreatePost()
+    } catch (error) {
+      // Handle error
+    }
+  }
+
+  const handleDeleteButtonClick = async () => {
+    try {
+      await deletePost(newPost.id)
+      console.log('post deleted successfully', deletePost)
+      handleDeletePost(newPost.id)
+      setNewPost({
+        id: 0,
+        title: '',
+        description: '',
+        user_id: 0,
+        image_url: null,
+      })
+    } catch (error) {
+      // Handle error
     }
   }
 
@@ -57,30 +81,10 @@ const UserPosts: React.FC<UserPostsProps> = ({
         onChange={handleDescriptionChange}
       />
       <input type="file" accept="image/*" onChange={handleImageChange} />
-      <button onClick={handleCreatePost}>Create Post</button>
 
-      {editPost && (
-        <div>
-          <h3>
-            <button onClick={() => setEditPost(null)}>Back</button> Edit Post
-          </h3>
-          <input
-            type="text"
-            value={editPost.title}
-            onChange={(e) =>
-              setEditPost({ ...editPost, title: e.target.value })
-            }
-          />
-          <textarea
-            value={editPost.description}
-            onChange={(e) =>
-              setEditPost({ ...editPost, description: e.target.value })
-            }
-          />
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-          <button onClick={handleUpdatePost}>Update Post</button>
-        </div>
-      )}
+      <button onClick={handleCreateButtonClick}>Create Post</button>
+
+      <button onClick={handleDeleteButtonClick}>Delete Post</button>
     </div>
   )
 }
