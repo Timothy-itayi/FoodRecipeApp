@@ -1,16 +1,18 @@
 import React, { useState, ChangeEvent } from 'react'
 import { addNewPost, updatePost, deletePost } from '../apis/posts'
+import { Post } from './types'
 
-interface Post {
-  id: number
-  title: string
-  description: string
-  user_id: number
-  image_url: string | null
+interface UserPostsProps {
+  handleCreatePost: () => void
+  handleUpdatePost: () => void
+  handleDeletePost: (id: number) => void
 }
 
-const UserPosts: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([])
+const UserPosts: React.FC<UserPostsProps> = ({
+  handleCreatePost,
+  handleUpdatePost,
+  handleDeletePost,
+}) => {
   const [newPost, setNewPost] = useState<Post>({
     id: 0,
     title: '',
@@ -18,7 +20,6 @@ const UserPosts: React.FC = () => {
     user_id: 0,
     image_url: null,
   })
-  const [editPost, setEditPost] = useState<Post | null>(null)
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewPost({ ...newPost, title: e.target.value })
@@ -36,15 +37,21 @@ const UserPosts: React.FC = () => {
     }
   }
 
-  const handleCreatePost = async () => {
+  const handleCreateButtonClick = async () => {
     try {
-      const { title, description, image_url } = newPost
+      await addNewPost(newPost)
+      console.log('new post added successfully', newPost)
+      handleCreatePost()
+    } catch (error) {
+      // Handle error
+    }
+  }
 
-      const newPostId = await addNewPost({ title, description, image_url })
-
-      const newPostWithId = { ...newPost, id: newPostId }
-
-      setPosts([newPostWithId])
+  const handleDeleteButtonClick = async () => {
+    try {
+      await deletePost(newPost.id)
+      console.log('post deleted successfully', deletePost)
+      handleDeletePost(newPost.id)
       setNewPost({
         id: 0,
         title: '',
@@ -53,36 +60,8 @@ const UserPosts: React.FC = () => {
         image_url: null,
       })
     } catch (error) {
-      console.error(error)
+      // Handle error
     }
-  }
-
-  const handleUpdatePost = async () => {
-    if (editPost) {
-      try {
-        const { id, title, description, image_url } = editPost
-
-        await updatePost(id, { title, description, image_url })
-
-        setPosts([editPost])
-        setEditPost(null)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-  }
-
-  const handleDeletePost = async (id: number) => {
-    try {
-      await deletePost(id)
-      setPosts([])
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const handleEditPost = (post: Post) => {
-    setEditPost(post)
   }
 
   return (
@@ -102,39 +81,10 @@ const UserPosts: React.FC = () => {
         onChange={handleDescriptionChange}
       />
       <input type="file" accept="image/*" onChange={handleImageChange} />
-      <button onClick={handleCreatePost}>Create Post</button>
 
-      <h3>Existing Posts</h3>
-      {posts.map((post) => (
-        <div key={post.id}>
-          <h4>{post.title}</h4>
-          <p>{post.description}</p>
-          {post.image_url && <img src={post.image_url} alt="Post" />}
-          <button onClick={() => handleEditPost(post)}>Edit</button>
-          <button onClick={() => handleDeletePost(post.id)}>Delete</button>
-        </div>
-      ))}
+      <button onClick={handleCreateButtonClick}>Create Post</button>
 
-      {editPost && (
-        <div>
-          <h3>Edit Post</h3>
-          <input
-            type="text"
-            value={editPost.title}
-            onChange={(e) =>
-              setEditPost({ ...editPost, title: e.target.value })
-            }
-          />
-          <textarea
-            value={editPost.description}
-            onChange={(e) =>
-              setEditPost({ ...editPost, description: e.target.value })
-            }
-          />
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-          <button onClick={handleUpdatePost}>Update Post</button>
-        </div>
-      )}
+      <button onClick={handleDeleteButtonClick}>Delete Post</button>
     </div>
   )
 }

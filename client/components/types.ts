@@ -1,7 +1,7 @@
-export type post = {
+export interface Post {
   id: number
   title: string
   description: string
   user_id: number
-  image_url: string
+  image_url: string | null
 }

@@ -1,92 +1,53 @@
-import React, { useState } from 'react'
-import { Card, CardMedia, CardContent, Typography } from '@material-ui/core'
-import Masonry from 'react-masonry-css'
+import React from 'react'
+import { Card, CardContent, Typography } from '@material-ui/core'
+import { Post } from './types'
 
-interface Post {
-  id: string
-  imageUrl: string
-  title: string
-  description: string
+interface MainFeedProps {
+  posts: Post[]
+  handleDeletePost: (id: number) => void
 }
 
-const posts: Post[] = [
-  {
-    id: '1',
-    imageUrl: 'pizzabread.jpeg',
-    title: 'Pizzabread',
-    description:
-      'homemade pizza dough, chopped tomatoes , bacon , feta cheese , basil  , seasoned with salt and pepper with a drizzle of oil',
-  },
-  {
-    id: '2',
-    imageUrl: 'pancakes.jpeg',
-    title: 'Pancakes',
-    description:
-      'add flour , sugar ,milk , baking powder with a few eggs and mix. leave to rest while you season your pan with oil .',
-  },
-  {
-    id: '3',
-    imageUrl: 'flatbread01.jpeg',
-    title: 'Veggie Flatbread',
-    description:
-      'homemade pizza dough, chopped carrots ,onions, seasoned with salt and pepper with a drizzle of oil',
-  },
-  {
-    id: '4',
-    imageUrl: 'breadbun.jpeg',
-    title: 'Bread Bun',
-    description: 'Stuffed bun.',
-  },
-  // Add more posts here
-]
+const MainFeed: React.FC<MainFeedProps> = ({ posts, handleDeletePost }) => {
+  console.log('MainFeed Component - posts:', posts)
 
-const MainFeed: React.FC = () => {
-  const [expandedPost, setExpandedPost] = useState<Post | null>(null)
-
-  const handlePostClick = (post: Post) => {
-    setExpandedPost(post)
+  if (posts.length === 0) {
+    console.log('MainFeed Component - No posts found')
+    return <p>No posts found.</p>
   }
 
-  const handlePostClose = () => {
-    setExpandedPost(null)
-  }
+  console.log('MainFeed Component - Rendering posts:', posts)
 
   return (
-    <Masonry
-      breakpointCols={{
-        default: 3,
-        1100: 2,
-        700: 1,
-      }}
-      className="masonry-grid"
-      columnClassName="masonry-grid-column"
-    >
+    <div>
       {posts.map((post) => (
-        <Card key={post.id} onClick={() => handlePostClick(post)}>
-          <CardMedia
-            component="img"
-            alt={post.title}
-            height="300"
-            image={post.imageUrl}
-          />
+        <Card key={post.id} style={{ marginBottom: '10px' }}>
           <CardContent>
-            <Typography variant="h6" component="h2">
+            <Typography
+              variant="h6"
+              component="h2"
+              style={{ marginBottom: '10px' }}
+            >
               {post.title}
             </Typography>
+            <Typography variant="body1" style={{ marginBottom: '10px' }}>
+              {post.description}
+            </Typography>
+            {post.image_url && (
+              <img
+                src={post.image_url}
+                alt={post.title}
+                style={{
+                  marginBottom: '10px',
+                  maxWidth: '100%',
+                  height: 'auto',
+                }}
+              />
+            )}
+            <button onClick={() => handleDeletePost(post.id)}>Delete</button>{' '}
           </CardContent>
-          {expandedPost?.id === post.id && (
-            <CardContent>
-              <Typography variant="h6" component="h2">
-                {expandedPost.title}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                {expandedPost.description}
-              </Typography>
-            </CardContent>
-          )}
         </Card>
       ))}
-    </Masonry>
+    </div>
   )
 }
 

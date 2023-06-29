@@ -15,11 +15,11 @@ export function getPost(id: number): Promise<any> {
 }
 
 export function addNewPost(newPost: any): Promise<number> {
-  const { title, description, user_id, image_url } = newPost
+  const { title, description, image_url } = newPost
   const postData = {
     title,
     description,
-    user_id,
+
     image_url,
   }
 
