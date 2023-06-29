@@ -10,7 +10,7 @@ import PostContainer from './components/PostContainer'
 import { deletePost } from './apis/posts'
 
 const App = () => {
-  const { isAuthenticated, isLoading } = useAuth0()
+  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0()
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false)
   const [postsData, setPostsData] = useState<Post[]>([])
 

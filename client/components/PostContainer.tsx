@@ -10,7 +10,7 @@ const PostContainer: React.FC = () => {
     id: 0,
     title: '',
     description: '',
-    user_id: 0,
+
     image_url: null,
   })
 
@@ -28,15 +28,7 @@ const PostContainer: React.FC = () => {
   // Pass the necessary props to UserPosts and MainFeed
   return (
     <div>
-      <UserPosts
-        handleCreatePost={handleCreatePost}
-        handleUpdatePost={function (): void {
-          throw new Error('Function not implemented.')
-        }}
-        handleDeletePost={function (id: number): void {
-          throw new Error('Function not implemented.')
-        }}
-      />
+      <UserPosts handleCreatePost={handleCreatePost} />
       <MainFeed
         posts={[]}
         handleDeletePost={function (id: number): void {
