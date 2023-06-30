@@ -2,6 +2,7 @@ import React from 'react'
 import { render, waitFor } from '@testing-library/react'
 import PostFetcher from '../components/PostFetcher'
 import '@testing-library/jest-dom/extend-expect'
+
 test('fetches and validates posts data', async () => {
   const setPostsData = jest.fn()
 
