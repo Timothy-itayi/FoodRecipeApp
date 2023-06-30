@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import MainFeed from '../components/MainFeed'
+import MainFeed from './MainFeed'
 import '@testing-library/jest-dom/extend-expect'
 
 const mockPosts = [

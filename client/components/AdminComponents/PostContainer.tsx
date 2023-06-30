@@ -2,8 +2,8 @@
 import React, { useState } from 'react'
 import UserPosts from './UserPosts'
 import MainFeed from './MainFeed'
-import { addNewPost } from '../apis/posts'
-import { Post } from './types'
+import { addNewPost } from '../../apis/posts'
+import { Post } from '../types'
 
 const PostContainer: React.FC = () => {
   const [newPost, setNewPost] = useState<Post>({

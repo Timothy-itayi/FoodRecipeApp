@@ -1,74 +1,99 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
-import SignIn from './components/SignIn'
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from 'react-router-dom'
 import Header from './components/AdminComponents/Header'
 import Footer from './components/AdminComponents/Footer'
+import SignIn from './components/SignIn'
+import UserProfile from './components/AdminComponents/UserProfiles'
+import CreateUser from './components/AdminComponents/CreateUser'
+import MainFeed from './components/AdminComponents/MainFeed'
+import ProtectedRoute from './components/AdminComponents/ProtectedRoutes'
 import { Post } from './components/types'
-import PostFetcher from './components/PostFetcher'
-import MainFeed from './components/MainFeed'
-import PostContainer from './components/PostContainer'
-import { deletePost } from './apis/posts'
-import UserProfile from './components/UserProfiles'
-import CreateUser from './components/CreateUser'
+import PostContainer from './components/AdminComponents/PostContainer'
+import PostFetcher from './components/AdminComponents/PostFetcher'
 
 const App = () => {
-  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0()
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false)
-  const [postsData, setPostsData] = useState<Post[]>([])
-  const [selectedIcon, setSelectedIcon] = useState('')
+  const { isLoading, isAuthenticated } = useAuth0()
 
-  useEffect(() => {
-    setIsUserAuthenticated(isAuthenticated)
-  }, [isAuthenticated])
-
-  useEffect(() => {
-    console.log('Posts data:', postsData)
-  }, [postsData])
-
-  const handleDeletePost = async (id: number) => {
-    try {
-      await deletePost(id)
-      console.log('Post deleted successfully:', id)
-      setPostsData((prevPostsData) =>
-        prevPostsData.filter((post) => post.id !== id)
-      )
-    } catch (error) {
-      console.error('Error deleting post:', error)
-    }
-  }
-
-  const handleIconSelect = (icon: string) => {
-    setSelectedIcon(icon)
-  }
-
-  const handleCreateUser = (username: string, userEmail: string) => {
-    // Add logic to create user and update database
-    console.log('Creating user:', username, userEmail)
+  if (isLoading) {
+    // Optional: Show a loading spinner or component while Auth0 is checking the authentication status
+    return <div>Loading...</div>
   }
 
   return (
-    <div>
+    <>
       <Header />
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <UserProfile
-            selectedIcon={selectedIcon}
-            onSelectIcon={handleIconSelect}
-            name={''}
-          />
-          <CreateUser
-            selectedIcon={selectedIcon}
-            onCreateUser={handleCreateUser}
-          />
-          <PostContainer />
-          <PostFetcher setPostsData={setPostsData} />
-          <MainFeed posts={postsData} handleDeletePost={handleDeletePost} />
-        </>
-      )}
+      <Routes>
+        <Route path="/" element={<SignIn />} />
+        <Route
+          path="/protected-routes"
+          element={
+            <ProtectedRoute
+              path=""
+              element={undefined}
+              isAuthenticated={false}
+            />
+          }
+        />
+        <Route
+          path="/user-profile"
+          element={
+            <UserProfile
+              name=""
+              selectedIcon=""
+              onSelectIcon={() => {
+                throw new Error('Function not implemented.')
+              }}
+            />
+          }
+        />
+        <Route
+          path="/create-user"
+          element={
+            <CreateUser
+              selectedIcon=""
+              onCreateUser={(username, userEmail) => {
+                throw new Error('Function not implemented.')
+              }}
+            />
+          }
+        />
+        <Route path="/post-container" element={<PostContainer />} />
+        <Route
+          path="/post-fetcher"
+          element={
+            <PostFetcher
+              setPostsData={(value) => {
+                throw new Error('Function not implemented.')
+              }}
+            />
+          }
+        />
+        <Route
+          path="/main-feed"
+          element={
+            <ProtectedRoute
+              path=""
+              element={
+                <MainFeed
+                  posts={[]}
+                  handleDeletePost={(id) => {
+                    throw new Error('Function not implemented.')
+                  }}
+                />
+              }
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+      </Routes>
       <Footer />
-    </div>
+    </>
   )
 }
 
