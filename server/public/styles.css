@@ -196,3 +196,26 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.user-profile__icons {
+  display: flex;
+  gap: 10px;
+}
+
+.user-profile__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.user-profile__icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.user-profile__icon.selected {
+  border: 2px solid #1da1f2;
+}
+
