@@ -28,20 +28,20 @@ const UserProfile: React.FC<UserProfileProps> = ({
           onClick={() => handleIconClick('/user-icons/IMG_3366.JPG')}
         />
         <img
-          src="/user-icons/photo-output_22.JPG"
+          src="/user-icons/icon_1.JPG"
           alt="User Icon 2"
           className={`user-profile__icon ${
-            selectedIcon === '/user-icons/photo-output_22.JPG' ? 'selected' : ''
+            selectedIcon === '/user-icons/icon_.JPG' ? 'selected' : ''
           }`}
-          onClick={() => handleIconClick('/user-icons/photo-output_22.JPG')}
+          onClick={() => handleIconClick('/user-icons/icon_1.JPG')}
         />
         <img
-          src="/user-icons/photo-output_83.JPG"
+          src="/user-icons/icon_2.JPG"
           alt="User Icon 3"
           className={`user-profile__icon ${
-            selectedIcon === '/user-icons/photo-output_83.JPG' ? 'selected' : ''
+            selectedIcon === '/user-icons/icon_2.JPG' ? 'selected' : ''
           }`}
-          onClick={() => handleIconClick('/user-icons/photo-output_83.JPG')}
+          onClick={() => handleIconClick('/user-icons/icon_2.JPG')}
         />
         {/* Add more pre-existing user icons as needed */}
       </div>

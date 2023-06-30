@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import SignIn from './components/SignIn'
 import Header from './components/AdminComponents/Header'
 import Footer from './components/AdminComponents/Footer'
@@ -10,11 +9,13 @@ import MainFeed from './components/MainFeed'
 import PostContainer from './components/PostContainer'
 import { deletePost } from './apis/posts'
 import UserProfile from './components/UserProfiles'
+import CreateUser from './components/CreateUser'
 
 const App = () => {
   const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0()
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false)
   const [postsData, setPostsData] = useState<Post[]>([])
+  const [selectedIcon, setSelectedIcon] = useState('')
 
   useEffect(() => {
     setIsUserAuthenticated(isAuthenticated)
@@ -36,48 +37,38 @@ const App = () => {
     }
   }
 
+  const handleIconSelect = (icon: string) => {
+    setSelectedIcon(icon)
+  }
+
+  const handleCreateUser = (username: string, userEmail: string) => {
+    // Add logic to create user and update database
+    console.log('Creating user:', username, userEmail)
+  }
+
   return (
-    <Router>
-      <div>
-        <Header />
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : (
-          <Routes>
-            <Route
-              path="/user-profile"
-              element={
-                <UserProfile
-                  name={''}
-                  selectedIcon={''}
-                  onSelectIcon={function (icon: string): void {
-                    throw new Error('Function not implemented.')
-                  }}
-                />
-              }
-            />
-            <Route
-              path="/"
-              element={
-                isUserAuthenticated ? (
-                  <>
-                    <PostContainer />
-                    <PostFetcher setPostsData={setPostsData} />
-                    <MainFeed
-                      posts={postsData}
-                      handleDeletePost={handleDeletePost}
-                    />
-                  </>
-                ) : (
-                  <SignIn />
-                )
-              }
-            />
-          </Routes>
-        )}
-        <Footer />
-      </div>
-    </Router>
+    <div>
+      <Header />
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <UserProfile
+            selectedIcon={selectedIcon}
+            onSelectIcon={handleIconSelect}
+            name={''}
+          />
+          <CreateUser
+            selectedIcon={selectedIcon}
+            onCreateUser={handleCreateUser}
+          />
+          <PostContainer />
+          <PostFetcher setPostsData={setPostsData} />
+          <MainFeed posts={postsData} handleDeletePost={handleDeletePost} />
+        </>
+      )}
+      <Footer />
+    </div>
   )
 }
 
