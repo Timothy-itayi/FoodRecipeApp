@@ -10,6 +10,8 @@ import PostContainer from './components/PostContainer'
 import { deletePost } from './apis/posts'
 import UserProfile from './components/UserProfiles'
 import CreateUser from './components/CreateUser'
+import IfAuthenticated from './components/Authenticated'
+import { IfNotAuthenticated } from './components/Authenticated'
 
 const App = () => {
   const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0()
@@ -49,9 +51,8 @@ const App = () => {
   return (
     <div>
       <Header />
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
+
+      <IfAuthenticated posts={postsData}>
         <>
           <UserProfile
             selectedIcon={selectedIcon}
@@ -66,7 +67,10 @@ const App = () => {
           <PostFetcher setPostsData={setPostsData} />
           <MainFeed posts={postsData} handleDeletePost={handleDeletePost} />
         </>
-      )}
+      </IfAuthenticated>
+      <IfNotAuthenticated posts={postsData}>
+        <SignIn />
+      </IfNotAuthenticated>
       <Footer />
     </div>
   )
