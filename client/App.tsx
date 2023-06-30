@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { useAuth0 } from '@auth0/auth0-react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { useAuth0 } from '@auth0/auth0-react'
 import SignIn from './components/SignIn'
 import Header from './components/AdminComponents/Header'
 import Footer from './components/AdminComponents/Footer'
@@ -10,11 +10,14 @@ import MainFeed from './components/MainFeed'
 import PostContainer from './components/PostContainer'
 import { deletePost } from './apis/posts'
 import UserProfile from './components/UserProfiles'
+import CreateUser from './components/CreateUser'
+import ReactDOM from 'react-dom'
 
 const App = () => {
   const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0()
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false)
   const [postsData, setPostsData] = useState<Post[]>([])
+  const [selectedIcon, setSelectedIcon] = useState('')
 
   useEffect(() => {
     setIsUserAuthenticated(isAuthenticated)
@@ -36,6 +39,15 @@ const App = () => {
     }
   }
 
+  const handleIconSelect = (icon: string) => {
+    setSelectedIcon(icon)
+  }
+
+  const handleCreateUser = (username: string, userEmail: string) => {
+    // Add logic to create user and update database
+    console.log('Creating user:', username, userEmail)
+  }
+
   return (
     <Router>
       <div>
@@ -43,42 +55,46 @@ const App = () => {
         {isLoading ? (
           <p>Loading...</p>
         ) : (
-          <Routes>
-            <Route
-              path="/user-profile"
-              element={
-                <UserProfile
-                  name={''}
-                  selectedIcon={''}
-                  onSelectIcon={function (icon: string): void {
-                    throw new Error('Function not implemented.')
-                  }}
-                />
-              }
+          <Route path="/user-profile">
+            <UserProfile
+              selectedIcon={selectedIcon}
+              onSelectIcon={handleIconSelect}
+              name={''}
             />
-            <Route
-              path="/"
-              element={
-                isUserAuthenticated ? (
-                  <>
-                    <PostContainer />
-                    <PostFetcher setPostsData={setPostsData} />
-                    <MainFeed
-                      posts={postsData}
-                      handleDeletePost={handleDeletePost}
-                    />
-                  </>
-                ) : (
-                  <SignIn />
-                )
-              }
+            <CreateUser
+              selectedIcon={selectedIcon}
+              onCreateUser={handleCreateUser}
             />
-          </Routes>
+          </Route>
         )}
+        <Routes>
+          {isUserAuthenticated ? (
+            <>
+              <Route path="/" element={<PostContainer />} />
+              <Route
+                path="/"
+                element={<PostFetcher setPostsData={setPostsData} />}
+              />
+              <Route
+                path="/"
+                element={
+                  <MainFeed
+                    posts={postsData}
+                    handleDeletePost={handleDeletePost}
+                  />
+                }
+              />
+            </>
+          ) : (
+            <Route path="/" element={<SignIn />} />
+          )}
+        </Routes>
         <Footer />
       </div>
     </Router>
   )
 }
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />)
 
 export default App
