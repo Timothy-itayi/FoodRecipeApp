@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import SignIn from './components/SignIn'
 import Header from './components/AdminComponents/Header'
@@ -11,7 +10,6 @@ import PostContainer from './components/PostContainer'
 import { deletePost } from './apis/posts'
 import UserProfile from './components/UserProfiles'
 import CreateUser from './components/CreateUser'
-import ReactDOM from 'react-dom'
 
 const App = () => {
   const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0()
@@ -49,52 +47,29 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <div>
-        <Header />
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : (
-          <Route path="/user-profile">
-            <UserProfile
-              selectedIcon={selectedIcon}
-              onSelectIcon={handleIconSelect}
-              name={''}
-            />
-            <CreateUser
-              selectedIcon={selectedIcon}
-              onCreateUser={handleCreateUser}
-            />
-          </Route>
-        )}
-        <Routes>
-          {isUserAuthenticated ? (
-            <>
-              <Route path="/" element={<PostContainer />} />
-              <Route
-                path="/"
-                element={<PostFetcher setPostsData={setPostsData} />}
-              />
-              <Route
-                path="/"
-                element={
-                  <MainFeed
-                    posts={postsData}
-                    handleDeletePost={handleDeletePost}
-                  />
-                }
-              />
-            </>
-          ) : (
-            <Route path="/" element={<SignIn />} />
-          )}
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+    <div>
+      <Header />
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <UserProfile
+            selectedIcon={selectedIcon}
+            onSelectIcon={handleIconSelect}
+            name={''}
+          />
+          <CreateUser
+            selectedIcon={selectedIcon}
+            onCreateUser={handleCreateUser}
+          />
+          <PostContainer />
+          <PostFetcher setPostsData={setPostsData} />
+          <MainFeed posts={postsData} handleDeletePost={handleDeletePost} />
+        </>
+      )}
+      <Footer />
+    </div>
   )
 }
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />)
 
 export default App
