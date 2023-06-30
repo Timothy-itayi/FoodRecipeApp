@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import { IfAuthenticated } from '../components/Authenticated'
+import { IfAuthenticated } from './Authenticated'
 import { useAuth0 } from '@auth0/auth0-react'
 import '@testing-library/jest-dom/extend-expect'
 
