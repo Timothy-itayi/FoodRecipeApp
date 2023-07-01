@@ -13,7 +13,7 @@ jest.mock('@auth0/auth0-react', () => ({
 
 test('checks if user is authenticated', () => {
   const { getByText } = render(
-    <IfAuthenticated posts={[]}>
+    <IfAuthenticated>
       <div>Authenticated Content</div>
     </IfAuthenticated>
   )

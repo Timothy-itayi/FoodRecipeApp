@@ -35,8 +35,6 @@ const UserPosts: React.FC<UserPostsProps> = ({ handleCreatePost }) => {
 
   return (
     <div>
-      <h2>Add Post</h2>
-
       <h3>Create a New Post</h3>
       <input
         type="text"
