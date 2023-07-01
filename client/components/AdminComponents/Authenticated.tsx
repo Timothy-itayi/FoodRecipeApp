@@ -1,14 +1,20 @@
-import React from 'react'
+// TODO: import useAuth0 function
 import { useAuth0 } from '@auth0/auth0-react'
 
-interface AuthenticatedProps {
+const useIsAuthenticated = () => {
+  // TODO: call the useAuth0 hook, destructure and return isAuthenticated
+  const { isAuthenticated } = useAuth0()
+  return isAuthenticated
+}
+interface Props {
   children: React.ReactNode
 }
-
-export function Authenticated({ children }: AuthenticatedProps) {
-  const { isAuthenticated } = useAuth0()
-
-  return isAuthenticated ? <>{children}</> : null
+export function IfAuthenticated(props: Props) {
+  const { children } = props
+  return useIsAuthenticated() ? <>{children}</> : null
 }
 
-export default Authenticated
+export function IfNotAuthenticated(props: Props) {
+  const { children } = props
+  return !useIsAuthenticated() ? <>{children}</> : null
+}

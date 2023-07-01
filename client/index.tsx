@@ -9,8 +9,9 @@ ReactDOM.render(
   <Auth0Provider
     domain="dev-kuvlvwpp7p78xckw.au.auth0.com"
     clientId="I9oex4ikfZqEz6Q5WFAKQN8bf9FDQDvL"
-    redirectUri={window.location.origin}
-    audience="https://recipe/api"
+    authorizationParams={{
+      redirect_uri: window.location.origin,
+    }}
   >
     <BrowserRouter>
       <App />

@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import { useAuth0 } from '@auth0/auth0-react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { User, useAuth0 } from '@auth0/auth0-react'
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from 'react-router-dom'
 import Header from './components/AdminComponents/Header'
 import Footer from './components/AdminComponents/Footer'
-import SignIn from './components/SignIn'
+
 import UserProfile from './components/AdminComponents/UserProfile'
-import { Authenticated } from './components/AdminComponents/Authenticated'
+import { IfAuthenticated } from './components/AdminComponents/Authenticated'
 import CreateUser from './components/AdminComponents/CreateUser'
 import Nav from './components/AdminComponents/Nav'
 import MainFeed from './components/AdminComponents/MainFeed'
 
+interface CustomUser {
+  name: string
+  email: string
+}
+
 const App = () => {
-  console.log('App component mounting')
-  const { isLoading, isAuthenticated } = useAuth0()
+  const { isLoading, isAuthenticated, user } = useAuth0<CustomUser>()
 
   if (isLoading) {
     // Optional: Show a loading spinner or component while Auth0 is checking the authentication status
@@ -22,19 +32,23 @@ const App = () => {
   return (
     <>
       <Header />
-      <Nav isAuthenticated={true} userName={''} />
+      <Nav isAuthenticated={isAuthenticated} userName={user?.name || ''} />
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        <Route path="/" element={''} />
         <Route
           path="/user-profile"
           element={
-            <UserProfile
-              name={''}
-              selectedIcon={''}
-              onSelectIcon={function (icon: string): void {
-                throw new Error('Function not implemented.')
-              }}
-            />
+            isAuthenticated ? (
+              <UserProfile
+                name={user?.name || ''}
+                selectedIcon={''}
+                onSelectIcon={function (icon: string): void {
+                  throw new Error('Function not implemented.')
+                }}
+              />
+            ) : (
+              <Navigate to="/" replace={true} />
+            )
           }
         />
         <Route
@@ -42,10 +56,7 @@ const App = () => {
           element={
             <CreateUser
               selectedIcon={''}
-              onCreateUser={function (
-                username: string,
-                userEmail: string
-              ): void {
+              onCreateUser={(username, userEmail) => {
                 throw new Error('Function not implemented.')
               }}
             />
@@ -56,7 +67,7 @@ const App = () => {
           element={
             <MainFeed
               posts={[]}
-              handleDeletePost={function (id: number): void {
+              handleDeletePost={(id) => {
                 throw new Error('Function not implemented.')
               }}
             />

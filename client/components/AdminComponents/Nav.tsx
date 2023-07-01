@@ -10,15 +10,13 @@ interface NavProps {
 
 const Nav: React.FC<NavProps> = ({ isAuthenticated, userName }) => {
   const { logout, loginWithRedirect, user } = useAuth0()
-
-  const handleSignOut = () => {
-    console.log('sign out')
-    logout()
-  }
-
   const handleSignIn = () => {
     console.log('sign in')
     loginWithRedirect()
+  }
+  const handleSignOut = () => {
+    console.log('sign out')
+    logout()
   }
 
   return (
