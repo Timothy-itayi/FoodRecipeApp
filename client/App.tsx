@@ -9,6 +9,9 @@ import UserProfile from './components/AdminComponents/UserProfiles'
 import ProtectedRoute from './components/AdminComponents/ProtectedRoutes'
 
 import { Authenticated } from './components/AdminComponents/Authenticated'
+import CreateUser from './components/AdminComponents/CreateUser'
+import NotAuthenticated from './components/AdminComponents/NotAuthenticated'
+import Nav from './components/AdminComponents/Nav'
 
 const App = () => {
   const { isLoading, isAuthenticated } = useAuth0()
@@ -21,6 +24,7 @@ const App = () => {
   return (
     <>
       <Header />
+      <Nav isAuthenticated={true} />
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route
@@ -49,7 +53,6 @@ const App = () => {
             </Authenticated>
           }
         />
-        {/* Other routes */}
       </Routes>
       <Footer />
     </>

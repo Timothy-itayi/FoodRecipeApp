@@ -6,7 +6,7 @@ interface AuthenticatedProps {
 }
 
 export function Authenticated({ children }: AuthenticatedProps) {
-  const { isAuthenticated, isLoading } = useAuth0()
+  const { isAuthenticated } = useAuth0()
 
   return isAuthenticated ? <>{children}</> : null
 }
