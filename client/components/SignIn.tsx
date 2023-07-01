@@ -5,6 +5,7 @@ const SignIn = () => {
   const { loginWithRedirect } = useAuth0()
 
   const handleSignIn = () => {
+    console.log('signed in ')
     loginWithRedirect()
   }
 

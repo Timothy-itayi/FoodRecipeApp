@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 interface UserProfileProps {
   name: string
@@ -11,6 +11,10 @@ const UserProfile: React.FC<UserProfileProps> = ({
   selectedIcon,
   onSelectIcon,
 }) => {
+  useEffect(() => {
+    console.log('UserProfile component mounting')
+  }, [])
+
   const handleIconClick = (icon: string) => {
     onSelectIcon(icon)
   }
@@ -31,7 +35,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
           src="/user-icons/icon_1.JPG"
           alt="User Icon 2"
           className={`user-profile__icon ${
-            selectedIcon === '/user-icons/icon_.JPG' ? 'selected' : ''
+            selectedIcon === '/user-icons/icon_1.JPG' ? 'selected' : ''
           }`}
           onClick={() => handleIconClick('/user-icons/icon_1.JPG')}
         />

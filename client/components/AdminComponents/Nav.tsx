@@ -6,7 +6,6 @@ import { Post } from '../types'
 interface NavProps {
   isAuthenticated: boolean
   userName: string
-  posts: Post[]
 }
 
 const Nav: React.FC<NavProps> = ({ isAuthenticated, userName }) => {
