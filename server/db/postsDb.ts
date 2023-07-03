@@ -21,22 +21,28 @@ export async function getAllPosts(db = connection) {
       'user_id',
       'image_url'
     )
-    console.log(posts)
+
     return posts
   } catch (error) {
     console.log(error, (error as Error).message)
   }
 }
-
 export async function getPost(id: number, res: Response, db = connection) {
-  const allPosts: any[] = (await getAllPosts(db)) || []
-  console.log('allPosts:', allPosts)
-  const post = allPosts.find((p: { id: number }) => p.id === id)
-  console.log('post', post)
-  if (!post) {
-    return res.status(404).json({ error: `Post with id ${id} not found` })
+  try {
+    const allPosts: any[] = (await getAllPosts(db)) || []
+    console.log('allPosts:', allPosts)
+    const post = allPosts.find((p: { id: number }) => p.id === id)
+    console.log('post', post)
+    if (!post) {
+      return res.status(404).json({ error: `Post with id ${id} not found` })
+    }
+    const { id: postId, title, description, user_id, image_url } = post
+    res.json({ id: postId, title, description, user_id, image_url })
+    return // Add this line to return after sending the response
+  } catch (error) {
+    console.error('Error in GET /posts/:id:', error)
+    return res.status(500).json({ error: (error as Error).message })
   }
-  return res.json(post)
 }
 
 export function addNewPost(newPost: Post, db = connection) {

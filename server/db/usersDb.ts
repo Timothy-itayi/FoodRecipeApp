@@ -1,11 +1,12 @@
-import { users } from '../../models/users'
-import connection from './connection'
 import { Response } from 'express'
+import connection from './connection'
+import { users } from '../../models/users'
+
 const knex = require('knex')
 const config = require('./knexfile')
 const db = knex(config.development)
 
-export interface User {
+interface User {
   id: number
   username: string
   user_email: string
@@ -13,31 +14,44 @@ export interface User {
 
 export async function GetAllUsers(db = connection) {
   try {
-    const tasks = await db('users').select('id', 'username', 'user_email')
-    console.log(tasks)
-    return tasks
+    const users = await db('users').select('id', 'username', 'user_email')
+    return users
   } catch (error) {
-    console.log(error, (error as Error).message)
+    console.error(error, (error as Error).message)
   }
 }
 
-export async function getUser(id: number, res: Response, db = connection) {
-  const allUsers: any[] = (await GetAllUsers(db)) || []
-  console.log('allUsers:', allUsers)
-  const user = allUsers.find((task: { id: number }) => task.id === id)
-  console.log('user', user)
+export async function getUser(
+  id: number,
+  db = connection
+): Promise<User | null> {
+  const allUsers: users[] = (await GetAllUsers(db)) || []
+  const user = allUsers.find((user: users) => user.id === id)
+
   if (!user) {
-    return res.status(404).json({ error: `User with id ${id} not found` })
+    return null
   }
-  return res.json(user)
+
+  const { id: userId, username, user_email } = user
+  const userObject = { id: userId, username, user_email }
+
+  return userObject
 }
 
-export function addNewUser(newUser: User, db = connection) {
-  return db<User>('users')
-    .insert(newUser)
-    .then((id: Number[]) => id[0])
+export function addNewUser(newUser: users, db = connection) {
+  try {
+    db<users>('users')
+      .insert(newUser)
+      .then((id: number[]) => id[0])
+  } catch (error) {
+    console.error('Error while adding a new user: ', error)
+  }
 }
 
 export function deleteUser(id: number, db = connection) {
-  return db<User>('users').where('id', id).delete()
+  try {
+    db<users>('users').where('id', id).delete()
+  } catch (error) {
+    console.error('Erro while deleting user ', error)
+  }
 }
