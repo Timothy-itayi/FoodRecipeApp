@@ -1,4 +1,3 @@
-import React from 'react'
 import { render } from '@testing-library/react'
 import { IfAuthenticated } from './Authenticated'
 import { useAuth0 } from '@auth0/auth0-react'
@@ -10,7 +9,6 @@ jest.mock('@auth0/auth0-react', () => ({
     isLoading: false,
   }),
 }))
-
 test('checks if user is authenticated', () => {
   const { getByText } = render(
     <IfAuthenticated>
@@ -18,5 +16,5 @@ test('checks if user is authenticated', () => {
     </IfAuthenticated>
   )
 
-  expect(getByText('Authenticated Content')).toBeInTheDocument()
+  expect(getByText('Authenticated Content')).toBeTruthy()
 })

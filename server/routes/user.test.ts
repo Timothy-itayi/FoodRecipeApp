@@ -33,7 +33,7 @@ test('GET /api/v1/users/:id should return a user', async () => {
 
 test('POST /api/v1/users should create a new user', async () => {
   const newUser = {
-    id: 100,
+    id: 101,
     username: 'John Adams',
     user_email: 'user@example.com',
     // Provide necessary user data for the test
