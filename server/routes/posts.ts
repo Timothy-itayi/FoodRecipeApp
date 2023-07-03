@@ -21,7 +21,7 @@ router.get('/:id', async (req, res) => {
     const postId = Number(req.params.id)
     console.log('Requested post ID:', postId)
     const post = await db.getPost(postId, res)
-    console.log('Retrieved post:', post)
+
     res.json(post)
   } catch (error) {
     console.error('Error in GET /posts/:id:', error)

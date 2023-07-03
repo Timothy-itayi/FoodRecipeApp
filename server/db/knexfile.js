@@ -1,6 +1,6 @@
 const { join } = require('node:path')
 
-module.exports = {
+const knexConfig = {
   development: {
     client: 'sqlite3',
     useNullAsDefault: true,
@@ -16,15 +16,13 @@ module.exports = {
     client: 'sqlite3',
     useNullAsDefault: true,
     connection: {
-      filename: ':memory:',
+      filename: join(__dirname, 'dev.sqlite3'),
     },
     migrations: {
       directory: join(__dirname, 'migrations'),
     },
     seeds: {
-      directory: join(__dirname, 'seeds'),
-      // Specify the order of seed files in the database
-      order: ['users.js', 'posts.js'],
+      directory: join(__dirname, './seeds'),
     },
     pool: {
       afterCreate: (conn, cb) => conn.run('PRAGMA foreign_keys = ON', cb),
@@ -43,3 +41,10 @@ module.exports = {
     },
   },
 }
+
+if (process.env.NODE_ENV === 'test') {
+  // Specify the order of seed files in the database for the 'test' environment
+  knexConfig.test.seeds.order = ['users.js', 'posts.js']
+}
+
+module.exports = knexConfig
