@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Navigate } from 'react-router-dom'
 
 interface UserProfileProps {
   name: string
@@ -11,15 +12,22 @@ const UserProfile: React.FC<UserProfileProps> = ({
   selectedIcon,
   onSelectIcon,
 }) => {
+  const [createUserClicked, setCreateUserClicked] = useState(false)
+
   useEffect(() => {
     console.log('UserProfile component mounting')
   }, [name, selectedIcon])
 
   const handleIconClick = (icon: string) => {
     onSelectIcon(icon)
+    setCreateUserClicked(true)
   }
 
   console.log('UserProfile component rendering')
+
+  if (createUserClicked) {
+    return <Navigate to="/create-user" replace={true} />
+  }
 
   return (
     <div className="user-profile">
