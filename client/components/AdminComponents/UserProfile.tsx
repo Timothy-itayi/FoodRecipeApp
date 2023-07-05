@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Navigate } from 'react-router-dom'
 
 interface UserProfileProps {
   name: string
@@ -11,19 +12,25 @@ const UserProfile: React.FC<UserProfileProps> = ({
   selectedIcon,
   onSelectIcon,
 }) => {
+  const [createUserClicked, setCreateUserClicked] = useState(false)
+
   useEffect(() => {
     console.log('UserProfile component mounting')
   }, [name, selectedIcon])
 
   const handleIconClick = (icon: string) => {
     onSelectIcon(icon)
+    setCreateUserClicked(true)
   }
 
   console.log('UserProfile component rendering')
 
+  if (createUserClicked) {
+    return <Navigate to="/create-user" replace={true} />
+  }
+
   return (
     <div className="user-profile">
-      <h2 className="user-profile__name">{name}</h2>
       <p>Welcome, {name}!</p>
       <p>Please create a user to be added to the database</p>
       <div className="user-profile__icons">
@@ -53,6 +60,15 @@ const UserProfile: React.FC<UserProfileProps> = ({
         />
         {/* Add more pre-existing user icons as needed */}
       </div>
+      {selectedIcon && (
+        <div className="selected-icon">
+          <img
+            src={selectedIcon}
+            alt="Selected Icon"
+            className="selected-icon__image"
+          />
+        </div>
+      )}
     </div>
   )
 }

@@ -11,7 +11,6 @@ const UserPosts: React.FC<UserPostsProps> = ({ handleCreatePost }) => {
     id: 0,
     title: '',
     description: '',
-
     image_url: null,
   })
 
@@ -47,7 +46,6 @@ const UserPosts: React.FC<UserPostsProps> = ({ handleCreatePost }) => {
         value={newPost.description}
         onChange={handleDescriptionChange}
       />
-
       <button onClick={handleCreateButtonClick}>Create Post</button>
     </div>
   )

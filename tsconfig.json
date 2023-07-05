@@ -3,7 +3,7 @@
     "transpileOnly": true
   },
   "compilerOptions": {
-    "types": ["react", "react-dom", "jest"],
+    "types": ["react", "react-dom", "jest", "jest-dom"],
     "esModuleInterop": true,
     "target": "es2016",
     "jsx": "react-jsx",
