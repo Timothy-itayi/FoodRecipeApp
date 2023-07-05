@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { addUser } from '../../apis/user'
 
 interface CreateUserProps {
   selectedIcon: string
@@ -29,6 +30,17 @@ const CreateUser: React.FC<CreateUserProps> = ({
     setUserEmail('')
   }
 
+  // const handleCreateButtonClick = async () => {
+  //   try {
+  //     await addUser({ name: username, email: userEmail })
+  //     console.log('User created successfully')
+  //     setUsername('')
+  //     setUserEmail('')
+  //   } catch (error) {
+  //     console.error('Error creating user:', error)
+  //   }
+  // }
+
   return (
     <div>
       <h2>Create User</h2>
@@ -56,7 +68,9 @@ const CreateUser: React.FC<CreateUserProps> = ({
           onChange={handleUserEmailChange}
         />
         <br />
-        <button type="submit">Create User</button>
+        <button onClick={handleCreateButtonClick} type="submit">
+          Create User
+        </button>
       </form>
     </div>
   )
