@@ -32,12 +32,13 @@ const App = () => {
   if (isLoading) {
     return <div>Loading...</div>
   }
+
   return (
     <>
       <Header />
       <Nav isAuthenticated={isAuthenticated} userName={user?.name || ''} />
       <Routes>
-        <Route path="/" element={<Navigate to="/user-profile" />} />
+        <Route path="/" element={<Home />} />
         <Route
           path="/user-profile"
           element={
@@ -68,7 +69,7 @@ const App = () => {
           element={
             <MainFeed
               posts={[]}
-              handleDeletePost={(id) => {
+              handleDeletePost={(id: number) => {
                 throw new Error('Function not implemented.')
               }}
             />
@@ -77,6 +78,14 @@ const App = () => {
       </Routes>
       <Footer />
     </>
+  )
+}
+
+const Home = () => {
+  return (
+    <IfAuthenticated>
+      <Navigate to="/user-profile" />
+    </IfAuthenticated>
   )
 }
 
