@@ -26,7 +26,6 @@ const Nav: React.FC<NavProps> = ({ isAuthenticated, userName }) => {
           <NavButton role="button" name="Sign out" onClick={handleSignOut}>
             Sign out
           </NavButton>
-          {user && <p>Signed in as: {user.name}</p>}
         </>
       ) : (
         <NavButton role="button" name="Sign in" onClick={handleSignIn}>

@@ -33,7 +33,11 @@ const CreateUser: React.FC<CreateUserProps> = ({
     <div>
       <h2>Create User</h2>
       <div>
-        <img src={selectedIcon} alt="Selected Icon" />
+        <img
+          className="selected-icon__image"
+          src={selectedIcon}
+          alt="Selected Icon"
+        />
       </div>
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>

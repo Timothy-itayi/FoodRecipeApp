@@ -215,7 +215,9 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.user-profile__icon.selected {
+.selected-icon__image{
   border: 2px solid #1da1f2;
+  width: 80px; /* Adjust the width to be 20% bigger */
+  height: 80px; 
 }
 

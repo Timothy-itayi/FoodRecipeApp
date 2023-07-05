@@ -31,7 +31,6 @@ const UserProfile: React.FC<UserProfileProps> = ({
 
   return (
     <div className="user-profile">
-      <h2 className="user-profile__name">{name}</h2>
       <p>Welcome, {name}!</p>
       <p>Please create a user to be added to the database</p>
       <div className="user-profile__icons">
@@ -61,6 +60,15 @@ const UserProfile: React.FC<UserProfileProps> = ({
         />
         {/* Add more pre-existing user icons as needed */}
       </div>
+      {selectedIcon && (
+        <div className="selected-icon">
+          <img
+            src={selectedIcon}
+            alt="Selected Icon"
+            className="selected-icon__image"
+          />
+        </div>
+      )}
     </div>
   )
 }
