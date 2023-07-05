@@ -68,8 +68,9 @@ const CreateUser: React.FC<CreateUserProps> = ({
           onChange={handleUserEmailChange}
         />
         <br />
-        <button type="submit">Create User</button>
-        <button type="button">Create User (Alt)</button>
+        <button onClick={handleCreateButtonClick} type="submit">
+          Create User
+        </button>
       </form>
     </div>
   )
