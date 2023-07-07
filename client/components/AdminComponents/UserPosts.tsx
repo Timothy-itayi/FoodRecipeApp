@@ -11,6 +11,7 @@ const UserPosts: React.FC<UserPostsProps> = ({ handleCreatePost }) => {
     id: 0,
     title: '',
     description: '',
+    user_id: '',
     image_url: null,
   })
 
