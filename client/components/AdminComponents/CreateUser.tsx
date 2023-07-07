@@ -1,19 +1,17 @@
 import React, { useState } from 'react'
-import { addUser } from '../../apis/user'
 import { useAuth0 } from '@auth0/auth0-react'
+import { addUser } from '../../apis/user'
+import MainFeed from './MainFeed'
 
 interface CreateUserProps {
   selectedIcon: string
   onCreateUser: (username: string, userEmail: string) => void
 }
 
-const CreateUser: React.FC<CreateUserProps> = ({
-  selectedIcon,
-  onCreateUser,
-}) => {
+const CreateUser: React.FC<CreateUserProps> = ({ selectedIcon }) => {
   const [username, setUsername] = useState('')
   const [userEmail, setUserEmail] = useState('')
-
+  const [successMessage, setSuccessMessage] = useState('')
   const { getAccessTokenSilently } = useAuth0()
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,22 +26,40 @@ const CreateUser: React.FC<CreateUserProps> = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    onCreateUser(username, userEmail)
-    setUsername('')
-    setUserEmail('')
-  }
 
-  const handleCreateButtonClick = async () => {
     try {
-      const authToken = await getAccessTokenSilently({})
+      const authToken = await getAccessTokenSilently()
 
-      await addUser({ name: username, email: userEmail }, authToken)
-      console.log('User created successfully')
-      setUsername('')
-      setUserEmail('')
+      if (authToken) {
+        const newUser = { username, user_email: userEmail }
+
+        const userId = await addUser(newUser, authToken)
+
+        if (userId) {
+          setSuccessMessage('User created successfully')
+          setUsername('')
+          setUserEmail('')
+        } else {
+          console.error('Error creating user')
+        }
+      } else {
+        console.error('Auth token is undefined')
+      }
     } catch (error) {
       console.error('Error creating user:', error)
     }
+  }
+
+  // Render MainFeed component if success message is set
+  if (successMessage) {
+    return (
+      <MainFeed
+        posts={[]}
+        handleDeletePost={function (id: number): void {
+          throw new Error('Function not implemented.')
+        }}
+      />
+    )
   }
 
   return (
@@ -73,10 +89,9 @@ const CreateUser: React.FC<CreateUserProps> = ({
           onChange={handleUserEmailChange}
         />
         <br />
-        <button onClick={handleCreateButtonClick} type="submit">
-          Create User
-        </button>
+        <button type="submit">Create User</button>
       </form>
+      {successMessage && <p>{successMessage}</p>}
     </div>
   )
 }

@@ -15,7 +15,7 @@ export async function addUser(
 ): Promise<number | null> {
   try {
     const response = await request
-      .post(`${rootUrl}/users`)
+      .post(rootUrl)
       .set('Authorization', `Bearer ${authToken}`)
       .send(newUser)
 

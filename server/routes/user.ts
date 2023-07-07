@@ -1,9 +1,26 @@
 import express, { Request, Response } from 'express'
-import checkJwt from '../Auth0'
+import { expressjwt as jwt, GetVerificationKey } from 'express-jwt'
+import jwks from 'jwks-rsa'
 import * as db from '../db/usersDb'
-import * as jwt from 'jsonwebtoken'
+import { JwtPayload } from 'jsonwebtoken'
 
 const router = express.Router()
+
+const domain = 'https://dev-kuvlvwpp7p78xckw.au.auth0.com'
+const audience = 'https://recipe/api'
+
+// Set up token verification middleware
+const checkJwt = jwt({
+  secret: jwks.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `${domain}/.well-known/jwks.json`,
+  }) as GetVerificationKey,
+  audience: audience,
+  issuer: `${domain}/`,
+  algorithms: ['RS256'],
+})
 
 interface User {
   id: number
@@ -21,7 +38,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-// GET /api/v1/users/:id
+// GET users by id /api/v1/users/:id
 router.get('/:id', async (req: Request, res: Response) => {
   try {
     const userId = Number(req.params.id)
@@ -38,50 +55,38 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 })
 
-// Get /api/get-access-token
-router.get('/get-access-token', (req, res) => {
-  try {
-    const { AUTH0_CLIENT_SECRET } = process.env
-    if (!AUTH0_CLIENT_SECRET) {
-      throw new Error('AUTH0_CLIENT_SECRET not defined')
-    }
-
-    const token = jwt.sign({}, AUTH0_CLIENT_SECRET, {
-      audience: 'https://recipe/api', // Replace with your API audience
-      issuer: 'https://dev-kuvlvwpp7p78xckw.au.auth0.com', // Replace with your Auth0 domain
-      expiresIn: '1h', // Set the expiration time as needed
-      algorithm: 'HS256', // Use the appropriate algorithm
-    })
-
-    // Send the token in the response
-    res.status(200).json({ token })
-  } catch (error) {
-    console.error('Error generating access token:', error)
-    res.status(500).json({ error: (error as Error).message })
-  }
-})
-
 // POST /api/v1/users
-router.post('/', checkJwt, async (req, res) => {
-  try {
-    const newUser = req.body
-    await db.addNewUser(newUser)
-    res.sendStatus(201)
-  } catch (error) {
-    console.log('Error adding user', error)
-    res.status(500).json({ error: (error as Error).message })
-  }
-})
+router.post(
+  '/',
+  checkJwt,
+  async (req: Request<{}, {}, User, JwtPayload>, res: Response) => {
+    try {
+      const authToken = req.headers.authorization
+      console.log('Auth Token:', authToken)
 
-// DELETE /api/v1/users/:id
-router.delete('/:id', checkJwt, async (req, res) => {
-  try {
-    const userId = Number(req.params.id)
-    await db.deleteUser(userId)
-    res.sendStatus(200)
-  } catch (error) {
-    res.status(500).json({ error: (error as Error).message })
+      const newUser = req.body
+      db.addNewUser(newUser, authToken || '') // Provide a default value if authToken is undefined
+
+      res.sendStatus(201)
+    } catch (error) {
+      console.log('Error adding user:', error)
+      res.status(500).json({ error: (error as Error).message })
+    }
   }
-})
+)
+// DELETE /api/v1/users/:id
+router.delete(
+  '/:id',
+  checkJwt,
+  async (req: Request<{ id: string }>, res: Response) => {
+    try {
+      const userId = Number(req.params.id)
+      await db.deleteUser(userId)
+      res.sendStatus(200)
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message })
+    }
+  }
+)
 
 export default router
