@@ -1,16 +1,16 @@
 import express, { Request, Response } from 'express'
-import { expressjwt as jwt, GetVerificationKey } from 'express-jwt'
+import { expressjwt as expressJwt, GetVerificationKey } from 'express-jwt'
 import jwks from 'jwks-rsa'
 import * as db from '../db/usersDb'
 import { JwtPayload } from 'jsonwebtoken'
 
 const router = express.Router()
-
+const jwt = require('jsonwebtoken')
 const domain = 'https://dev-kuvlvwpp7p78xckw.au.auth0.com'
 const audience = 'https://recipe/api'
 
 // Set up token verification middleware
-const checkJwt = jwt({
+const checkJwt = expressJwt({
   secret: jwks.expressJwtSecret({
     cache: true,
     rateLimit: true,
@@ -62,7 +62,11 @@ router.post(
   async (req: Request<{}, {}, User, JwtPayload>, res: Response) => {
     try {
       const authToken = req.headers.authorization
-      console.log('Auth Token:', authToken)
+      console.log(req.headers.authorization)
+
+      // Decode the JWT token
+      const decodedToken = jwt.decode(authToken, { complete: true })
+      console.log(decodedToken)
 
       const newUser = req.body
       db.addNewUser(newUser, authToken || '') // Provide a default value if authToken is undefined
@@ -74,6 +78,7 @@ router.post(
     }
   }
 )
+
 // DELETE /api/v1/users/:id
 router.delete(
   '/:id',

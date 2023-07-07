@@ -43,17 +43,17 @@ export async function getUser(
     throw error
   }
 }
-
 export function addNewUser(
-  newUser: users,
+  newUser: User,
   authToken: string | undefined,
   db = connection
 ): Promise<number> {
   return new Promise((resolve, reject) => {
     try {
+      const userWithAuthToken = { ...newUser, authToken }
       db<users>('users')
-        .insert(newUser)
-        .then((id: number[]) => resolve(id[0]))
+        .insert(userWithAuthToken)
+        .then((ids: number[]) => resolve(ids[0]))
         .catch((error: Error) => reject(error))
     } catch (error) {
       reject(error)
