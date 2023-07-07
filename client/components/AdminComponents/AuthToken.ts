@@ -12,18 +12,17 @@ const Auth0 = () => {
             grant_type: 'client_credentials',
             client_id: 'I9oex4ikfZqEz6Q5WFAKQN8bf9FDQDvL',
             client_secret:
-              'pakMpN2SvBT90gNYdukZBfUbsRzRHRxor70_KikcG8Ni1h8zikt2Lc5tNT94G7X4',
+              'BQ2BaWpMSTdhSw8W3EoYdEFmz-02EnanUXx4_DsUfv3imIiC8FurR1IDapk0wZSS',
             audience: 'https://recipe/api',
           }).toString(),
         }
       )
 
       const { access_token } = await response.json()
-
       if (access_token) {
         const userData = {
-          name: 'John Doe', // Replace with the user data you want to send
-          email: 'john.doe@example.com',
+          username: 'John Doe', // Replace with the user data you want to send
+          user_email: 'john.doe@example.com',
         }
 
         const createUserResponse = await fetch(
