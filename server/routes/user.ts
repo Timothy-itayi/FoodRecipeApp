@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-// GET /api/v1/users/:id
+// GET users by id /api/v1/users/:id
 router.get('/:id', async (req: Request, res: Response) => {
   try {
     const userId = Number(req.params.id)
@@ -62,19 +62,18 @@ router.post(
   async (req: Request<{}, {}, User, JwtPayload>, res: Response) => {
     try {
       const authToken = req.headers.authorization
-      console.log(authToken)
+      console.log('Auth Token:', authToken)
 
       const newUser = req.body
       db.addNewUser(newUser, authToken || '') // Provide a default value if authToken is undefined
 
       res.sendStatus(201)
     } catch (error) {
-      console.log('Error adding user', error)
+      console.log('Error adding user:', error)
       res.status(500).json({ error: (error as Error).message })
     }
   }
 )
-
 // DELETE /api/v1/users/:id
 router.delete(
   '/:id',
