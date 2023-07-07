@@ -1,9 +1,13 @@
 import ReactDOM from 'react-dom'
-import { Auth0Provider } from '@auth0/auth0-react'
+import { Auth0Provider, Auth0ProviderOptions } from '@auth0/auth0-react'
 import { BrowserRouter } from 'react-router-dom'
 import React from 'react'
 
 import App from './App'
+
+interface CustomAuth0ProviderOptions extends Auth0ProviderOptions {
+  audience: string
+}
 
 ReactDOM.render(
   <Auth0Provider

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { addUser } from '../../apis/user'
+import { useAuth0 } from '@auth0/auth0-react'
 
 interface CreateUserProps {
   selectedIcon: string
@@ -13,6 +14,8 @@ const CreateUser: React.FC<CreateUserProps> = ({
   const [username, setUsername] = useState('')
   const [userEmail, setUserEmail] = useState('')
 
+  const { getAccessTokenSilently } = useAuth0()
+
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value)
   }
@@ -23,23 +26,25 @@ const CreateUser: React.FC<CreateUserProps> = ({
     setUserEmail(event.target.value)
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     onCreateUser(username, userEmail)
     setUsername('')
     setUserEmail('')
   }
 
-  // const handleCreateButtonClick = async () => {
-  //   try {
-  //     await addUser({ name: username, email: userEmail })
-  //     console.log('User created successfully')
-  //     setUsername('')
-  //     setUserEmail('')
-  //   } catch (error) {
-  //     console.error('Error creating user:', error)
-  //   }
-  // }
+  const handleCreateButtonClick = async () => {
+    try {
+      const authToken = await getAccessTokenSilently({})
+
+      await addUser({ name: username, email: userEmail }, authToken)
+      console.log('User created successfully')
+      setUsername('')
+      setUserEmail('')
+    } catch (error) {
+      console.error('Error creating user:', error)
+    }
+  }
 
   return (
     <div>
