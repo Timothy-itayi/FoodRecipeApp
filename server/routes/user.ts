@@ -1,9 +1,26 @@
 import express, { Request, Response } from 'express'
-import checkJwt, { JwtRequest } from '../Auth0'
+import { expressjwt as jwt, GetVerificationKey } from 'express-jwt'
+import jwks from 'jwks-rsa'
 import * as db from '../db/usersDb'
-import * as jwt from 'jsonwebtoken'
+import { JwtPayload } from 'jsonwebtoken'
 
 const router = express.Router()
+
+const domain = 'https://dev-kuvlvwpp7p78xckw.au.auth0.com'
+const audience = 'https://recipe/api'
+
+// Set up token verification middleware
+const checkJwt = jwt({
+  secret: jwks.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `${domain}/.well-known/jwks.json`,
+  }) as GetVerificationKey,
+  audience: audience,
+  issuer: `${domain}/`,
+  algorithms: ['RS256'],
+})
 
 interface User {
   id: number
@@ -39,26 +56,38 @@ router.get('/:id', async (req: Request, res: Response) => {
 })
 
 // POST /api/v1/users
-router.post('/', checkJwt, async (req: JwtRequest<User>, res: Response) => {
-  try {
-    const newUser = req.body
-    await db.addNewUser(newUser)
-    res.sendStatus(201)
-  } catch (error) {
-    console.log('Error adding user', error)
-    res.status(500).json({ error: (error as Error).message })
+router.post(
+  '/',
+  checkJwt,
+  async (req: Request<{}, {}, User, JwtPayload>, res: Response) => {
+    try {
+      const authToken = req.headers.authorization
+      console.log(authToken)
+
+      const newUser = req.body
+      db.addNewUser(newUser, authToken || '') // Provide a default value if authToken is undefined
+
+      res.sendStatus(201)
+    } catch (error) {
+      console.log('Error adding user', error)
+      res.status(500).json({ error: (error as Error).message })
+    }
   }
-})
+)
 
 // DELETE /api/v1/users/:id
-router.delete('/:id', checkJwt, async (req, res) => {
-  try {
-    const userId = Number(req.params.id)
-    await db.deleteUser(userId)
-    res.sendStatus(200)
-  } catch (error) {
-    res.status(500).json({ error: (error as Error).message })
+router.delete(
+  '/:id',
+  checkJwt,
+  async (req: Request<{ id: string }>, res: Response) => {
+    try {
+      const userId = Number(req.params.id)
+      await db.deleteUser(userId)
+      res.sendStatus(200)
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message })
+    }
   }
-})
+)
 
 export default router

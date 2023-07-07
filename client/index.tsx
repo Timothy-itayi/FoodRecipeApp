@@ -13,6 +13,8 @@ ReactDOM.render(
   <Auth0Provider
     domain="dev-kuvlvwpp7p78xckw.au.auth0.com"
     clientId="I9oex4ikfZqEz6Q5WFAKQN8bf9FDQDvL"
+    audience="https://dev-kuvlvwpp7p78xckw.au.auth0.com/api/v2/"
+    scope="read:current_user update:current_user_metadata"
     authorizationParams={{
       redirect_uri: window.location.origin,
     }}

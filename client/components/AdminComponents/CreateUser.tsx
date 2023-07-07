@@ -13,7 +13,6 @@ const CreateUser: React.FC<CreateUserProps> = ({
 }) => {
   const [username, setUsername] = useState('')
   const [userEmail, setUserEmail] = useState('')
-
   const { getAccessTokenSilently } = useAuth0()
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +25,7 @@ const CreateUser: React.FC<CreateUserProps> = ({
     setUserEmail(event.target.value)
   }
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     onCreateUser(username, userEmail)
     setUsername('')
@@ -35,12 +34,27 @@ const CreateUser: React.FC<CreateUserProps> = ({
 
   const handleCreateButtonClick = async () => {
     try {
-      const authToken = await getAccessTokenSilently({})
+      const authToken = await getAccessTokenSilently()
 
-      await addUser({ name: username, email: userEmail }, authToken)
-      console.log('User created successfully')
-      setUsername('')
-      setUserEmail('')
+      if (authToken) {
+        const newUser = { name: username, email: userEmail }
+
+        // Make the API request
+        await fetch(`https://localhost:3000/api/v1/users`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify(newUser),
+        })
+
+        console.log('User created successfully')
+        setUsername('')
+        setUserEmail('')
+      } else {
+        console.error('Auth token is undefined')
+      }
     } catch (error) {
       console.error('Error creating user:', error)
     }
@@ -73,9 +87,7 @@ const CreateUser: React.FC<CreateUserProps> = ({
           onChange={handleUserEmailChange}
         />
         <br />
-        <button onClick={handleCreateButtonClick} type="submit">
-          Create User
-        </button>
+        <button onClick={handleCreateButtonClick}>Create User</button>
       </form>
     </div>
   )
