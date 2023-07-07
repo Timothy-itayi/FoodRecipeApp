@@ -14,8 +14,13 @@ export async function addUser(
   authToken: string
 ): Promise<number | null> {
   try {
+    console.log(authToken)
+    console.log(authToken.length)
+    console.log(typeof authToken)
     const response = await request
+
       .post(rootUrl)
+
       .set('Authorization', `Bearer ${authToken}`)
       .send(newUser)
 
