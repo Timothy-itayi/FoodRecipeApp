@@ -4,9 +4,11 @@ import request from 'superagent'
 const rootUrl = '/api/v1/users'
 
 export function getUser(id: number): Promise<User | null> {
-  return request.get(`${rootUrl}/${id}`).then((res) => {
-    return res.body.user
-  })
+  return request
+    .get(`${rootUrl}/${id}`)
+    .then((res: { body: { user: any } }) => {
+      return res.body.user
+    })
 }
 
 export async function addUser(newUser: User): Promise<number | null> {
@@ -26,7 +28,7 @@ export function deleteUser(id: number): Promise<void> {
     .then(() => {
       console.log('User deleted successfully.')
     })
-    .catch((error) => {
+    .catch((error: any) => {
       console.error('Error while deleting user: ', error)
     })
 }

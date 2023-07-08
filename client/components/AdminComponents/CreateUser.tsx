@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { addUser } from '../../apis/user'
-import AddedUser from './AddedUser'
+// import AddedUser from './AddedUser'
 
 interface CreateUserProps {
   selectedIcon: string
@@ -42,7 +42,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ selectedIcon }) => {
   }
 
   if (successMessage) {
-    return <AddedUser />
+    // return <AddedUser />
   }
 
   return (

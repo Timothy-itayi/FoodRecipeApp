@@ -1,15 +1,15 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+// import React from 'react'
+// import { Link } from 'react-router-dom'
 
-const AddedUser = () => {
-  return (
-    <div>
-      <h2>User Added Successfully</h2>
-      <p>User has been added to the database.</p>
-      <Link to="/table/:tableNo/menu">Return to Menu</Link>
-      <Link to="/table/:tableNo">Return Home</Link>
-    </div>
-  )
-}
+// const AddedUser: React.FC = () => {
+//   return (
+//     <div>
+//       <h2>User Added Successfully</h2>
+//       <p>Thank you for creating a user!</p>
+//       <Link to="/mainfeed">Go to Main Feed</Link>
+//       <Link to="/create-post">Add Your Own Post</Link>
+//     </div>
+//   )
+// }
 
-export default AddedUser
+// export default AddedUser
