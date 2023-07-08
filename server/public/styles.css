@@ -221,3 +221,12 @@
   height: 80px; 
 }
 
+.login-button {
+  background-color: #1da1f2;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 9999px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}

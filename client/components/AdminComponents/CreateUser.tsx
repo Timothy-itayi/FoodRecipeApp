@@ -72,7 +72,9 @@ const CreateUser: React.FC<CreateUserProps> = ({ selectedIcon }) => {
           onChange={handleUserEmailChange}
         />
         <br />
-        <button type="submit">Create User</button>
+        <button className="login-button" type="submit">
+          Create User
+        </button>
       </form>
     </div>
   )
