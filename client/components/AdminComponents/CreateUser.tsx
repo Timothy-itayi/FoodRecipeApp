@@ -30,6 +30,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ selectedIcon }) => {
       const userId = await addUser(newUser)
 
       if (userId) {
+        console.log(userId)
         setSuccessMessage(true)
         setUsername('')
         setUserEmail('')
@@ -42,7 +43,7 @@ const CreateUser: React.FC<CreateUserProps> = ({ selectedIcon }) => {
   }
 
   if (successMessage) {
-    return <CreatedUser />
+    return <CreatedUser isAuthenticated={false} />
   }
 
   return (

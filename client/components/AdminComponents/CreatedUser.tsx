@@ -1,13 +1,43 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
+import MainFeed from './MainFeed'
+import UserPosts from './UserPosts'
 
-const CreatedUser: React.FC = () => {
+interface CreatedUserProps {
+  isAuthenticated: boolean
+}
+
+const CreatedUser: React.FC<CreatedUserProps> = ({ isAuthenticated }) => {
+  if (!isAuthenticated) {
+    return <Navigate to="/" />
+  }
+
   return (
     <div>
-      <h2>user Added Successfully</h2>
-      <p>Thank you for creating a user!</p>
-      <Link to="/mainfeed">Go to Main Feed</Link>
-      <Link to="/create-post">Add Your Own Post</Link>
+      {/* Render any other content for the CreatedUser component here */}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <MainFeed
+              posts={[]}
+              handleDeletePost={function (id: number): void {
+                throw new Error('Function not implemented.')
+              }}
+            />
+          }
+        />
+        <Route
+          path="/userposts"
+          element={
+            <UserPosts
+              handleCreatePost={function (): void {
+                throw new Error('Function not implemented.')
+              }}
+            />
+          }
+        />
+      </Routes>
     </div>
   )
 }
