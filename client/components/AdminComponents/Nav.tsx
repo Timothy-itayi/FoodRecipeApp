@@ -25,34 +25,24 @@ const Nav: React.FC<NavProps> = ({ isAuthenticated, userName }) => {
     <NavGroup className="beige-nav">
       {isAuthenticated ? (
         <>
-          <NavButton role="button" name="Sign out" onClick={handleSignOut}>
+          <NavButton
+            role="button"
+            name="Sign out"
+            onClick={handleSignOut}
+            className="login-button"
+          >
             Sign out
           </NavButton>
         </>
       ) : (
-        <>
-          <NavButton
-            role="button"
-            name="Sign in with Google"
-            onClick={handleSignIn}
-          >
-            Sign in with Google
-          </NavButton>
-          <NavButton
-            role="button"
-            name="Sign in with Twitter"
-            onClick={handleSignIn}
-          >
-            Sign in with Twitter
-          </NavButton>
-          <NavButton
-            role="button"
-            name="Sign in with GitHub"
-            onClick={handleSignIn}
-          >
-            Sign in with GitHub
-          </NavButton>
-        </>
+        <NavButton
+          role="button"
+          name="Sign in with Google"
+          onClick={handleSignIn}
+          className="login-button"
+        >
+          Sign in with Google
+        </NavButton>
       )}
     </NavGroup>
   )

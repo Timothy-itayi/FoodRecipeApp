@@ -10,7 +10,7 @@ const PostContainer: React.FC = () => {
     id: 0,
     title: '',
     description: '',
-
+    user_id: 0,
     image_url: null,
   })
 
