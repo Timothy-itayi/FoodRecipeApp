@@ -56,28 +56,16 @@ router.get('/:id', async (req: Request, res: Response) => {
 })
 
 // POST /api/v1/users
-router.post(
-  '/',
-  checkJwt,
-  async (req: Request<{}, {}, User, JwtPayload>, res: Response) => {
-    try {
-      const authToken = req.headers.authorization
-      console.log(req.headers.authorization)
-
-      // Decode the JWT token
-      const decodedToken = jwt.decode(authToken, { complete: true })
-      console.log(decodedToken)
-
-      const newUser = req.body
-      db.addNewUser(newUser, authToken || '') // Provide a default value if authToken is undefined
-
-      res.sendStatus(201)
-    } catch (error) {
-      console.log('Error adding user:', error)
-      res.status(500).json({ error: (error as Error).message })
-    }
+router.post('/', async (req: Request<{}, {}, User>, res: Response) => {
+  try {
+    const newUser = req.body
+    const userId = await db.addNewUser(newUser)
+    res.status(201).json({ userId })
+  } catch (error) {
+    console.log('Error adding user:', error)
+    res.status(500).json({ error: (error as Error).message })
   }
-)
+})
 
 // DELETE /api/v1/users/:id
 router.delete(
