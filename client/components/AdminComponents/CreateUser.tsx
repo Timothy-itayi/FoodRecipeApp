@@ -1,18 +1,15 @@
 import React, { useState } from 'react'
-import { useAuth0 } from '@auth0/auth0-react'
 import { addUser } from '../../apis/user'
-import MainFeed from './MainFeed'
+import AddedUser from './AddedUser'
 
 interface CreateUserProps {
   selectedIcon: string
-  onCreateUser: (username: string, userEmail: string) => void
 }
 
 const CreateUser: React.FC<CreateUserProps> = ({ selectedIcon }) => {
   const [username, setUsername] = useState('')
   const [userEmail, setUserEmail] = useState('')
-  const [successMessage, setSuccessMessage] = useState('')
-  const { getAccessTokenSilently } = useAuth0()
+  const [successMessage, setSuccessMessage] = useState(false)
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value)
@@ -28,38 +25,24 @@ const CreateUser: React.FC<CreateUserProps> = ({ selectedIcon }) => {
     event.preventDefault()
 
     try {
-      const authToken = await getAccessTokenSilently()
+      const newUser = { username, user_email: userEmail }
 
-      if (authToken) {
-        const newUser = { username, user_email: userEmail }
+      const userId = await addUser(newUser)
 
-        const userId = await addUser(newUser, authToken)
-
-        if (userId) {
-          setSuccessMessage('User created successfully')
-          setUsername('')
-          setUserEmail('')
-        } else {
-          console.error('Error creating user')
-        }
+      if (userId) {
+        setSuccessMessage(true)
+        setUsername('')
+        setUserEmail('')
       } else {
-        console.error('Auth token is undefined')
+        console.error('Error creating user')
       }
     } catch (error) {
       console.error('Error creating user:', error)
     }
   }
 
-  // Render MainFeed component if success message is set
   if (successMessage) {
-    return (
-      <MainFeed
-        posts={[]}
-        handleDeletePost={function (id: number): void {
-          throw new Error('Function not implemented.')
-        }}
-      />
-    )
+    return <AddedUser />
   }
 
   return (
@@ -91,7 +74,6 @@ const CreateUser: React.FC<CreateUserProps> = ({ selectedIcon }) => {
         <br />
         <button type="submit">Create User</button>
       </form>
-      {successMessage && <p>{successMessage}</p>}
     </div>
   )
 }
