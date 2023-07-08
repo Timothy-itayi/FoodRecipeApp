@@ -9,22 +9,11 @@ export function getUser(id: number): Promise<User | null> {
   })
 }
 
-export async function addUser(
-  newUser: User,
-  authToken: string
-): Promise<number | null> {
+export async function addUser(newUser: User): Promise<number | null> {
   try {
-    console.log(authToken)
-    console.log(authToken.length)
-    console.log(typeof authToken)
-    const response = await request
+    const response = await request.post(rootUrl).send(newUser)
 
-      .post(rootUrl)
-
-      .set('Authorization', `Bearer ${authToken}`)
-      .send(newUser)
-
-    return response.body.id
+    return response.body.userId
   } catch (error) {
     console.error('Error while adding a new user: ', error)
     return null
