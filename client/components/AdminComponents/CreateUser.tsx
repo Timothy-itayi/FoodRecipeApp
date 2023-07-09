@@ -1,15 +1,25 @@
 import React, { useState } from 'react'
 import { addUser } from '../../apis/user'
-import CreatedUser from './CreatedUser'
+import { Link, useNavigate } from 'react-router-dom'
+import UserPosts from './UserPosts'
+import MainFeed from './MainFeed'
 
 interface CreateUserProps {
   selectedIcon: string
+  onCreateUser: (username: string, userEmail: string, userId: number) => void
 }
 
-const CreateUser: React.FC<CreateUserProps> = ({ selectedIcon }) => {
+const CreateUser: React.FC<CreateUserProps> = ({
+  selectedIcon,
+  onCreateUser,
+}) => {
   const [username, setUsername] = useState('')
   const [userEmail, setUserEmail] = useState('')
   const [successMessage, setSuccessMessage] = useState(false)
+  const [showUserPosts, setShowUserPosts] = useState(false)
+  const [showMainFeed, setShowMainFeed] = useState(false)
+  const [userId, setUserId] = useState<number>(0) // Add userId state
+  const navigate = useNavigate()
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value)
@@ -27,10 +37,12 @@ const CreateUser: React.FC<CreateUserProps> = ({ selectedIcon }) => {
     try {
       const newUser = { username, user_email: userEmail }
 
-      const userId = await addUser(newUser)
+      const createdUserId = await addUser(newUser)
 
-      if (userId) {
-        console.log(userId)
+      if (createdUserId) {
+        setUserId(createdUserId) // Set the userId
+        console.log(createdUserId)
+        onCreateUser(username, userEmail, createdUserId)
         setSuccessMessage(true)
         setUsername('')
         setUserEmail('')
@@ -42,8 +54,39 @@ const CreateUser: React.FC<CreateUserProps> = ({ selectedIcon }) => {
     }
   }
 
+  const handleMakePost = () => {
+    setShowUserPosts(true)
+  }
+
+  const handleShowMainFeed = () => {
+    setShowMainFeed(true)
+  }
+
+  if (showUserPosts) {
+    return <UserPosts handleCreatePost={() => {}} userId={userId} />
+  }
+
+  if (showMainFeed) {
+    return (
+      <MainFeed
+        posts={[]}
+        handleDeletePost={function (id: number): void {
+          throw new Error('Function not implemented.')
+        }}
+      />
+    )
+  }
+
   if (successMessage) {
-    return <CreatedUser isAuthenticated={false} />
+    return (
+      <div>
+        <h2>User Created!</h2>
+        <p>Thank you for adding a user.</p>
+        <p>What would you like to do next?</p>
+        <button onClick={handleMakePost}>Make a Post</button>
+        <button onClick={handleShowMainFeed}>Show Main Feed</button>
+      </div>
+    )
   }
 
   return (

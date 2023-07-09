@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-
-import About from './About'
+import AboutContent from './AboutContent'
 
 const Header = () => {
   const [showAbout, setShowAbout] = useState(false)
@@ -12,10 +11,10 @@ const Header = () => {
 
   return (
     <header className="header-container">
-      <h1 className="header-title">
-        <img className="logo" src="/logo.jpeg"></img>
-        "Embrace the Art of Flavorful cooking"
-      </h1>
+      <div className="header-content">
+        <img className="logo" src="/logo.jpeg" alt="Logo" />
+        <h1 className="header-title">Embrace the Art of Flavorful Cooking</h1>
+      </div>
 
       <nav className="main-nav">
         <ul className="nav-list">
@@ -36,7 +35,8 @@ const Header = () => {
           </li>
         </ul>
       </nav>
-      {showAbout && <About />}
+
+      {showAbout && <AboutContent />}
     </header>
   )
 }

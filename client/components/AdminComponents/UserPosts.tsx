@@ -4,14 +4,15 @@ import { Post } from '../types'
 
 interface UserPostsProps {
   handleCreatePost: () => void
+  userId: number
 }
 
-const UserPosts: React.FC<UserPostsProps> = ({ handleCreatePost }) => {
+const UserPosts: React.FC<UserPostsProps> = ({ handleCreatePost, userId }) => {
   const [newPost, setNewPost] = useState<Post>({
     id: 0,
     title: '',
     description: '',
-    user_id: '',
+    user_id: 0,
     image_url: null,
   })
 
@@ -25,11 +26,13 @@ const UserPosts: React.FC<UserPostsProps> = ({ handleCreatePost }) => {
 
   const handleCreateButtonClick = async () => {
     try {
-      await addNewPost(newPost)
-      console.log('new post added successfully', newPost)
+      const newPostWithUserId = { ...newPost, user_id: userId }
+      const newPostId = await addNewPost(newPostWithUserId)
+      console.log('New post added successfully. postId:', newPostId) // Log the newPostId
+
       handleCreatePost()
     } catch (error) {
-      console.log('Error adding new post', error)
+      console.error('Error adding new post:', error)
     }
   }
 

@@ -14,7 +14,7 @@ import { IfAuthenticated } from './components/AdminComponents/Authenticated'
 import CreateUser from './components/AdminComponents/CreateUser'
 import Nav from './components/AdminComponents/Nav'
 import MainFeed from './components/AdminComponents/MainFeed'
-import CreatedUser from './components/AdminComponents/CreatedUser'
+
 import UserPosts from './components/AdminComponents/UserPosts'
 
 interface CustomUser {
@@ -61,7 +61,8 @@ const App = () => {
               <CreateUser
                 selectedIcon={selectedIcon}
                 onCreateUser={(username: string, userEmail: string) => {
-                  throw new Error('Function not implemented.')
+                  // Handle the creation of the user here
+                  console.log('Creating user:', username, userEmail)
                 }}
               />
             ) : (
@@ -73,7 +74,7 @@ const App = () => {
           path="/created-user"
           element={
             isAuthenticated ? (
-              <CreatedUser isAuthenticated={isAuthenticated} />
+              <Navigate to="/created-user/mainfeed" replace={true} />
             ) : (
               <Navigate to="/" />
             )
@@ -106,11 +107,13 @@ const App = () => {
     </>
   )
 }
+
 const Home = () => {
   return (
     <IfAuthenticated>
-      <Navigate to="/user-profile" />
+      <Navigate to="/user-profile" replace={true} />
     </IfAuthenticated>
   )
 }
+
 export default App
