@@ -44,16 +44,21 @@ export async function getPost(id: number, res: Response, db = connection) {
     return res.status(500).json({ error: (error as Error).message })
   }
 }
-
-export function addNewPost(newPost: Post, db = connection) {
-  return db<Post>('posts')
-    .insert({
-      title: newPost.title,
-      description: newPost.description,
-      user_id: newPost.user_id,
-      image_url: newPost.image_url,
-    })
-    .then((id: number[]) => id[0])
+export async function addNewPost(newPost: Post, db = connection) {
+  try {
+    const [postId] = await db<Post>('posts')
+      .insert({
+        title: newPost.title,
+        description: newPost.description,
+        user_id: newPost.user_id,
+        image_url: newPost.image_url,
+      })
+      .returning('id') // Retrieve the 'postId' from the inserted row
+    return postId
+  } catch (error) {
+    console.error('Error adding new post:', error)
+    throw error // Rethrow the error to be caught in the frontend
+  }
 }
 
 export function updatePost(

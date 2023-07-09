@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function About() {
+export default function AboutContent() {
   return (
-    <div>
+    <div className="about-content">
       <h2>About Flavorful Recipes</h2>
       <p>
         Flavorful Recipes is a platform dedicated to embracing the art of

@@ -12,6 +12,8 @@
   align-items: center;
 }
 
+
+
 .header-logo img {
   width: 50px; /* Adjust the size of the logo as needed */
   height: auto;
@@ -25,9 +27,15 @@
 }
 
 /* Nav Bar styling */
-.nav-container {
-  background-color: #eae2d9; /* Earthy tone */
-  padding: 10px;
+.about-content {
+  font-size: 18px; /* Default font size for desktop */
+  max-width: 800px; /* Adjust the value based on your design */
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px; /* Font size for smaller screens */
+    max-width: 100%; /* Allow the content to take full width on smaller screens */
+    padding: 0 10px; /* Optional: Add padding to the sides for better readability */
+  }
 }
 
 .nav-list {
