@@ -35,12 +35,12 @@ const UserProfile: React.FC<UserProfileProps> = ({
       <p>Please create a user to be added to the database</p>
       <div className="user-profile__icons">
         <img
-          src="/user-icons/IMG_3366.JPG"
+          src="/user-icons/icon.JPG"
           alt="User Icon 1"
           className={`user-profile__icon ${
-            selectedIcon === '/user-icons/IMG_3366.JPG' ? 'selected' : ''
+            selectedIcon === '/user-icons/icon.JPG' ? 'selected' : ''
           }`}
-          onClick={() => handleIconClick('/user-icons/IMG_3366.JPG')}
+          onClick={() => handleIconClick('/user-icons/icon.JPG')}
         />
         <img
           src="/user-icons/icon_1.JPG"
@@ -58,7 +58,30 @@ const UserProfile: React.FC<UserProfileProps> = ({
           }`}
           onClick={() => handleIconClick('/user-icons/icon_2.JPG')}
         />
-        {/* Add more pre-existing user icons as needed */}
+        <img
+          src="/user-icons/icon4.JPG"
+          alt="User Icon 4"
+          className={`user-profile__icon ${
+            selectedIcon === '/user-icons/icon4.JPG' ? 'selected' : ''
+          }`}
+          onClick={() => handleIconClick('/user-icons/icon4.JPG')}
+        />
+        <img
+          src="/user-icons/icon5.JPG"
+          alt="User Icon 5"
+          className={`user-profile__icon ${
+            selectedIcon === '/user-icons/icon5.JPG' ? 'selected' : ''
+          }`}
+          onClick={() => handleIconClick('/user-icons/icon5.JPG')}
+        />
+        <img
+          src="/user-icons/icon6.JPG"
+          alt="User Icon 6"
+          className={`user-profile__icon ${
+            selectedIcon === '/user-icons/icon6.JPG' ? 'selected' : ''
+          }`}
+          onClick={() => handleIconClick('/user-icons/icon6.JPG')}
+        />
       </div>
       {selectedIcon && (
         <div className="selected-icon">
