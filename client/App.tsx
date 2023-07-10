@@ -98,6 +98,7 @@ const App = () => {
                 handleCreatePost={function (): void {
                   throw new Error('Function not implemented.')
                 }}
+                userId={0}
               />
             }
           />
