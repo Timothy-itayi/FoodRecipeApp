@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent } from 'react'
-import { addNewPost, updatePost, deletePost } from '../../apis/posts'
-import { Post } from '../types'
+import { addNewPost, updatePost, deletePost } from '../../../apis/posts'
+import { Post } from '../../types'
 
 interface UserPostsProps {
   handleCreatePost: (newPostWithUserId: Post) => void

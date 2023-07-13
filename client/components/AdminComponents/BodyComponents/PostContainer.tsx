@@ -1,8 +1,8 @@
 import React, { SetStateAction, useState } from 'react'
 import UserPosts from './UserPosts'
 import MainFeed from './MainFeed'
-import { addNewPost } from '../../apis/posts'
-import { Post } from '../types'
+import { addNewPost } from '../../../apis/posts'
+import { Post } from '../../types'
 import PostFetcher from './PostFetcher'
 
 const PostContainer: React.FC = () => {
@@ -13,13 +13,6 @@ const PostContainer: React.FC = () => {
     user_id: 0,
     image_url: null,
   })
-
-  const handleDeletePost = (post: Post) => {
-    try {
-    } catch (error) {}
-    console.log('Deleting post:', post)
-    setPosts((prevPosts) => prevPosts.filter((p) => p.id !== post.id))
-  }
 
   const handleCreatePost = async () => {
     try {
@@ -44,7 +37,7 @@ const PostContainer: React.FC = () => {
     <div>
       <PostFetcher setPostsData={setPosts} />
       <UserPosts handleCreatePost={handleCreatePost} userId={0} posts={posts} />
-      <MainFeed posts={posts} handleDeletePost={handleDeletePost} />
+      <MainFeed posts={posts} />
     </div>
   )
 }
