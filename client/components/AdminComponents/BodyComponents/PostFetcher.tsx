@@ -11,8 +11,10 @@ const PostFetcher: React.FC<PostFetcherProps> = ({ setPostsData }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log('Fetching data...')
       try {
         const response = await fetch(`/api/v1/posts?cacheBuster=${Date.now()}`)
+        console.log('Response:', response)
 
         const data = await response.json()
         console.log('Fetched Data:', data) // Check the fetched data
@@ -28,6 +30,9 @@ const PostFetcher: React.FC<PostFetcherProps> = ({ setPostsData }) => {
 
     fetchData()
   }, [setPostsData])
+
+  console.log('loading:', loading)
+  console.log('error:', error)
 
   if (loading) {
     return (
