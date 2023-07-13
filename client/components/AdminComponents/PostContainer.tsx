@@ -1,9 +1,9 @@
-// PostContainer.tsx
-import React, { useState } from 'react'
+import React, { SetStateAction, useState } from 'react'
 import UserPosts from './UserPosts'
 import MainFeed from './MainFeed'
 import { addNewPost } from '../../apis/posts'
 import { Post } from '../types'
+import PostFetcher from './PostFetcher'
 
 const PostContainer: React.FC = () => {
   const [newPost, setNewPost] = useState<Post>({
@@ -14,27 +14,37 @@ const PostContainer: React.FC = () => {
     image_url: null,
   })
 
+  const handleDeletePost = (post: Post) => {
+    try {
+    } catch (error) {}
+    console.log('Deleting post:', post)
+    setPosts((prevPosts) => prevPosts.filter((p) => p.id !== post.id))
+  }
+
   const handleCreatePost = async () => {
     try {
       const postId = await addNewPost(newPost)
       console.log('New post created:', newPost)
-      // Update the state in MainFeed to include the newly added post
-      // You can use a state management library like Redux or React Context
+
+      setNewPost({
+        id: 0,
+        title: '',
+        description: '',
+        user_id: 0,
+        image_url: null,
+      })
     } catch (error) {
       console.error('Error creating post:', error)
     }
   }
 
-  // Pass the necessary props to UserPosts and MainFeed
+  const [posts, setPosts] = useState<Post[]>([])
+
   return (
     <div>
-      <UserPosts handleCreatePost={handleCreatePost} />
-      <MainFeed
-        posts={[]}
-        handleDeletePost={function (id: number): void {
-          throw new Error('Function not implemented.')
-        }}
-      />
+      <PostFetcher setPostsData={setPosts} />
+      <UserPosts handleCreatePost={handleCreatePost} userId={0} posts={posts} />
+      <MainFeed posts={posts} handleDeletePost={handleDeletePost} />
     </div>
   )
 }

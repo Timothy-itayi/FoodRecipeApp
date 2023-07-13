@@ -63,7 +63,7 @@ const CreateUser: React.FC<CreateUserProps> = ({
   }
 
   if (showUserPosts) {
-    return <UserPosts handleCreatePost={() => {}} userId={userId} />
+    return <UserPosts handleCreatePost={() => {}} userId={0} posts={[]} />
   }
 
   if (showMainFeed) {

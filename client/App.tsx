@@ -16,6 +16,7 @@ import Nav from './components/AdminComponents/Nav'
 import MainFeed from './components/AdminComponents/MainFeed'
 
 import UserPosts from './components/AdminComponents/UserPosts'
+import { Post } from './components/types'
 
 interface CustomUser {
   name: string
@@ -25,9 +26,20 @@ interface CustomUser {
 const App = () => {
   const { isLoading, isAuthenticated, user } = useAuth0<CustomUser>()
   const [selectedIcon, setSelectedIcon] = useState('')
+  const [posts, setPosts] = useState<Post[]>([]) // Add posts state
 
   const handleIconSelect = (icon: string) => {
     setSelectedIcon(icon)
+  }
+
+  const handleCreatePost = (newPost: Post) => {
+    setPosts((prevPosts) => [...prevPosts, newPost])
+  }
+
+  const handleDeletePost = (id: number) => {
+    // Implement the logic to delete the post
+    // Update the posts state accordingly
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id))
   }
 
   if (isLoading) {
@@ -83,22 +95,16 @@ const App = () => {
           <Route
             path="mainfeed"
             element={
-              <MainFeed
-                posts={[]}
-                handleDeletePost={function (id: number): void {
-                  throw new Error('Function not implemented.')
-                }}
-              />
+              <MainFeed posts={posts} handleDeletePost={handleDeletePost} />
             }
           />
           <Route
             path="userposts"
             element={
               <UserPosts
-                handleCreatePost={function (): void {
-                  throw new Error('Function not implemented.')
-                }}
+                handleCreatePost={handleCreatePost}
                 userId={0}
+                posts={[]}
               />
             }
           />

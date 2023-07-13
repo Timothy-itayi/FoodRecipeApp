@@ -27,7 +27,7 @@ export function addNewPost(newPost: any): Promise<number> {
     .send(postData)
     .then((res) => {
       console.log(res.body) // Log the response body
-      return res.body // Ensure the 'postId' property is present in the response
+      return newPost
     })
 }
 

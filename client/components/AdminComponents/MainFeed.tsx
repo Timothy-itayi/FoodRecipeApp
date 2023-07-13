@@ -12,7 +12,7 @@ const MainFeed: React.FC<MainFeedProps> = ({ posts, handleDeletePost }) => {
 
   if (posts.length === 0) {
     console.log('MainFeed Component - No posts found')
-    return <p>Posts</p>
+    return <p>No posts found</p>
   }
 
   console.log('MainFeed Component - Rendering posts:', posts)
