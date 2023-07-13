@@ -3,11 +3,16 @@ import { addNewPost, updatePost, deletePost } from '../../apis/posts'
 import { Post } from '../types'
 
 interface UserPostsProps {
-  handleCreatePost: () => void
+  handleCreatePost: (newPostWithUserId: Post) => void
   userId: number
+  posts: Post[] // Add posts prop
 }
 
-const UserPosts: React.FC<UserPostsProps> = ({ handleCreatePost, userId }) => {
+const UserPosts: React.FC<UserPostsProps> = ({
+  handleCreatePost,
+  userId,
+  posts,
+}) => {
   const [newPost, setNewPost] = useState<Post>({
     id: 0,
     title: '',
@@ -28,9 +33,19 @@ const UserPosts: React.FC<UserPostsProps> = ({ handleCreatePost, userId }) => {
     try {
       const newPostWithUserId = { ...newPost, user_id: userId }
       const newPostId = await addNewPost(newPostWithUserId)
-      console.log('New post added successfully. postId:', newPostId) // Log the newPostId
+      console.log(
+        'New post added successfully. newPostwithUserId:',
+        newPostWithUserId
+      )
 
-      handleCreatePost()
+      handleCreatePost(newPostWithUserId)
+      setNewPost({
+        id: 0,
+        title: '',
+        description: '',
+        user_id: 0,
+        image_url: null,
+      })
     } catch (error) {
       console.error('Error adding new post:', error)
     }
@@ -51,6 +66,14 @@ const UserPosts: React.FC<UserPostsProps> = ({ handleCreatePost, userId }) => {
         onChange={handleDescriptionChange}
       />
       <button onClick={handleCreateButtonClick}>Create Post</button>
+
+      <h3>Posts</h3>
+      {posts.map((post) => (
+        <div key={post.id}>
+          <h4>{post.title}</h4>
+          <p>{post.description}</p>
+        </div>
+      ))}
     </div>
   )
 }
