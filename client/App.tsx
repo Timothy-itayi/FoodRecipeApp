@@ -9,13 +9,13 @@ import {
 
 import Header from './components/AdminComponents/Header'
 import Footer from './components/AdminComponents/Footer'
-import UserProfile from './components/AdminComponents/UserProfile'
-import { IfAuthenticated } from './components/AdminComponents/Authenticated'
-import CreateUser from './components/AdminComponents/CreateUser'
+import UserProfile from './components/AdminComponents/BodyComponents/UserProfile'
+import { IfAuthenticated } from './components/AdminComponents/BodyComponents/Authenticated'
+import CreateUser from './components/AdminComponents/BodyComponents/CreateUser'
 import Nav from './components/AdminComponents/Nav'
-import MainFeed from './components/AdminComponents/MainFeed'
+import MainFeed from './components/AdminComponents/BodyComponents/MainFeed'
 
-import UserPosts from './components/AdminComponents/UserPosts'
+import UserPosts from './components/AdminComponents/BodyComponents/UserPosts'
 import { Post } from './components/types'
 
 interface CustomUser {

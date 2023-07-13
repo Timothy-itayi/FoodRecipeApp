@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { addUser } from '../../apis/user'
+import { addUser } from '../../../apis/user'
 import { Link, useNavigate } from 'react-router-dom'
 import UserPosts from './UserPosts'
 import MainFeed from './MainFeed'
@@ -67,14 +67,7 @@ const CreateUser: React.FC<CreateUserProps> = ({
   }
 
   if (showMainFeed) {
-    return (
-      <MainFeed
-        posts={[]}
-        handleDeletePost={function (id: number): void {
-          throw new Error('Function not implemented.')
-        }}
-      />
-    )
+    return <MainFeed posts={[]} />
   }
 
   if (successMessage) {

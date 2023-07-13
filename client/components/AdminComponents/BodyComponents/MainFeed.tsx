@@ -1,13 +1,13 @@
 import React from 'react'
 import { Card, CardContent, Typography } from '@material-ui/core'
-import { Post } from '../types'
+import { Post } from '../../types'
 
 interface MainFeedProps {
   posts: Post[]
-  handleDeletePost: (id: number) => void
+  // handleDeletePost: (id: number) => void
 }
 
-const MainFeed: React.FC<MainFeedProps> = ({ posts, handleDeletePost }) => {
+const MainFeed: React.FC<MainFeedProps> = ({ posts }) => {
   console.log('MainFeed Component - posts:', posts)
 
   if (posts.length === 0) {
@@ -43,7 +43,7 @@ const MainFeed: React.FC<MainFeedProps> = ({ posts, handleDeletePost }) => {
                 }}
               />
             )}
-            <button onClick={() => handleDeletePost(post.id)}>Delete</button>{' '}
+            {/* <button onClick={() => handleDeletePost(post.id)}>Delete</button>{' '} */}
           </CardContent>
         </Card>
       ))}
