@@ -1,10 +1,10 @@
+// MainFeed.tsx
 import React from 'react'
 import { Card, CardContent, Typography } from '@material-ui/core'
 import { Post } from '../../types'
 
 interface MainFeedProps {
   posts: Post[]
-  // handleDeletePost: (id: number) => void
 }
 
 const MainFeed: React.FC<MainFeedProps> = ({ posts }) => {
@@ -43,7 +43,6 @@ const MainFeed: React.FC<MainFeedProps> = ({ posts }) => {
                 }}
               />
             )}
-            {/* <button onClick={() => handleDeletePost(post.id)}>Delete</button>{' '} */}
           </CardContent>
         </Card>
       ))}

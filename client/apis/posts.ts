@@ -1,10 +1,23 @@
 import request from 'superagent'
+import { Post } from '../components/types'
 
 const rootUrl = '/api/v1/posts'
 
-export function getAllPosts(): Promise<any[]> {
+export function getAllPosts(): Promise<Post[]> {
   return request.get(rootUrl).then((res) => {
-    return res.body.posts
+    const data = res.body
+    console.log('Fetched Data:', data) // Check the value of data
+
+    // Transform data into an array of objects
+    const posts = data.map((item: any) => ({
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      user_id: item.user_id,
+      image_url: item.image_url,
+    }))
+
+    return posts
   })
 }
 

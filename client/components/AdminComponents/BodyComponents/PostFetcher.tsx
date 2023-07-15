@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Post } from '../../types'
+import { getAllPosts } from '../../../apis/posts'
 
 interface PostFetcherProps {
-  setPostsData: React.Dispatch<React.SetStateAction<Post[]>>
+  setPostsData: (posts: any[]) => void
 }
 
 const PostFetcher: React.FC<PostFetcherProps> = ({ setPostsData }) => {
@@ -11,13 +11,12 @@ const PostFetcher: React.FC<PostFetcherProps> = ({ setPostsData }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log('Fetching data...')
       try {
-        const response = await fetch(`/api/v1/posts?cacheBuster=${Date.now()}`)
+        const posts = await getAllPosts()
+        console.log('Fetched Data:', posts) // Check the fetched data
 
-        const data = await response.json()
-        console.log('Fetched Data:', data) // Check the fetched data
-
-        setPostsData(data.posts) // Update the postsData state with data.posts
+        setPostsData(posts) // Update the postsData state with fetched posts
         setLoading(false)
       } catch (error) {
         setError('Error fetching data')
@@ -28,6 +27,9 @@ const PostFetcher: React.FC<PostFetcherProps> = ({ setPostsData }) => {
 
     fetchData()
   }, [setPostsData])
+
+  console.log('loading:', loading)
+  console.log('error:', error)
 
   if (loading) {
     return (

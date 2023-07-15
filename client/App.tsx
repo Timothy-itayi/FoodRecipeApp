@@ -17,7 +17,8 @@ import MainFeed from './components/AdminComponents/BodyComponents/MainFeed'
 
 import UserPosts from './components/AdminComponents/BodyComponents/UserPosts'
 import { Post } from './components/types'
-
+import PostFetcher from './components/AdminComponents/BodyComponents/PostFetcher'
+import { getAllPosts } from './apis/posts'
 interface CustomUser {
   name: string
   email: string
@@ -26,7 +27,7 @@ interface CustomUser {
 const App = () => {
   const { isLoading, isAuthenticated, user } = useAuth0<CustomUser>()
   const [selectedIcon, setSelectedIcon] = useState('')
-  const [posts, setPosts] = useState<Post[]>([]) // Add posts state
+  const [posts, setPosts] = useState<Post[]>([])
 
   const handleIconSelect = (icon: string) => {
     setSelectedIcon(icon)
@@ -34,12 +35,6 @@ const App = () => {
 
   const handleCreatePost = (newPost: Post) => {
     setPosts((prevPosts) => [...prevPosts, newPost])
-  }
-
-  const handleDeletePost = (id: number) => {
-    // Implement the logic to delete the post
-    // Update the posts state accordingly
-    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id))
   }
 
   if (isLoading) {
@@ -50,6 +45,7 @@ const App = () => {
     <>
       <Header />
       <Nav isAuthenticated={isAuthenticated} userName={user?.name || ''} />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
@@ -73,7 +69,6 @@ const App = () => {
               <CreateUser
                 selectedIcon={selectedIcon}
                 onCreateUser={(username: string, userEmail: string) => {
-                  // Handle the creation of the user here
                   console.log('Creating user:', username, userEmail)
                 }}
               />
@@ -86,29 +81,31 @@ const App = () => {
           path="/created-user"
           element={
             isAuthenticated ? (
-              <Navigate to="/created-user/mainfeed" replace={true} />
+              <>
+                <Navigate to="/created-user/mainfeed" replace={true} />
+                <PostFetcher
+                  setPostsData={function (posts: any[]): void {
+                    throw new Error('Function not implemented.')
+                  }}
+                />
+
+                <Route path="mainfeed" element={<MainFeed posts={posts} />} />
+                <Route
+                  path="userposts"
+                  element={
+                    <UserPosts
+                      handleCreatePost={handleCreatePost}
+                      userId={0}
+                      posts={[]}
+                    />
+                  }
+                />
+              </>
             ) : (
               <Navigate to="/" />
             )
           }
-        >
-          <Route
-            path="mainfeed"
-            element={
-              <MainFeed posts={posts} handleDeletePost={handleDeletePost} />
-            }
-          />
-          <Route
-            path="userposts"
-            element={
-              <UserPosts
-                handleCreatePost={handleCreatePost}
-                userId={0}
-                posts={[]}
-              />
-            }
-          />
-        </Route>
+        />
       </Routes>
       <Footer />
     </>
