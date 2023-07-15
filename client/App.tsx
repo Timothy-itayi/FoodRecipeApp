@@ -46,6 +46,7 @@ const App = () => {
       {/* Use the PostFetcher component to fetch and set the posts data */}
       {/* <PostFetcher setPostsData={setPosts} />{' '} */}
       {/* Uncomment the PostFetcher component */}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
@@ -85,7 +86,7 @@ const App = () => {
                 <Navigate to="/created-user/mainfeed" replace={true} />
                 <PostFetcher
                   setPostsData={function (
-                    value: React.SetStateAction<Post[]>
+                    _value: React.SetStateAction<Post[]>
                   ): void {
                     throw new Error('Function not implemented.')
                   }}
