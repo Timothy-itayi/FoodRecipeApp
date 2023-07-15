@@ -18,6 +18,7 @@ import MainFeed from './components/AdminComponents/BodyComponents/MainFeed'
 import UserPosts from './components/AdminComponents/BodyComponents/UserPosts'
 import { Post } from './components/types'
 import PostFetcher from './components/AdminComponents/BodyComponents/PostFetcher'
+import { getAllPosts } from './apis/posts'
 interface CustomUser {
   name: string
   email: string
@@ -27,6 +28,7 @@ const App = () => {
   const { isLoading, isAuthenticated, user } = useAuth0<CustomUser>()
   const [selectedIcon, setSelectedIcon] = useState('')
   const [posts, setPosts] = useState<Post[]>([])
+
   const handleIconSelect = (icon: string) => {
     setSelectedIcon(icon)
   }
@@ -43,9 +45,6 @@ const App = () => {
     <>
       <Header />
       <Nav isAuthenticated={isAuthenticated} userName={user?.name || ''} />
-      {/* Use the PostFetcher component to fetch and set the posts data */}
-      {/* <PostFetcher setPostsData={setPosts} />{' '} */}
-      {/* Uncomment the PostFetcher component */}
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -85,21 +84,12 @@ const App = () => {
               <>
                 <Navigate to="/created-user/mainfeed" replace={true} />
                 <PostFetcher
-                  setPostsData={function (
-                    _value: React.SetStateAction<Post[]>
-                  ): void {
+                  setPostsData={function (posts: any[]): void {
                     throw new Error('Function not implemented.')
                   }}
                 />
-                <Route
-                  path="mainfeed"
-                  element={
-                    <MainFeed
-                      posts={posts}
-                      // handleDeletePost={handleDeletePost}
-                    />
-                  }
-                />
+
+                <Route path="mainfeed" element={<MainFeed posts={posts} />} />
                 <Route
                   path="userposts"
                   element={
