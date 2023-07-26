@@ -8,10 +8,11 @@ import Nav from './components/AdminComponents/Nav'
 
 import { Post } from './components/types'
 import PostContainer from './components/AdminComponents/BodyComponents/PostContainer'
+import UserPosts from './components/AdminComponents/BodyComponents/UserPosts'
 
-interface CustomUser {
-  name: string
-  email: string
+export interface CustomUser {
+  username: string
+  userEmail: string
 }
 
 const App: React.FC = () => {
@@ -42,8 +43,17 @@ const App: React.FC = () => {
     <>
       <Header />
       <Nav isAuthenticated={isAuthenticated} userName={user?.name || ''} />
-      <PostContainer post={posts} />
-      <Footer />
+      <PostContainer posts={posts} />
+      <UserPosts
+        User={user}
+        handleCreatePost={function (newPostWithUserId: Post): void {
+          throw new Error('Function not implemented.')
+        }}
+        id={0}
+        username={''}
+        user_email={''}
+        posts={[]}
+      />
     </>
   )
 }
