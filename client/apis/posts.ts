@@ -8,16 +8,21 @@ export function getAllPosts(): Promise<Post[]> {
     const data = res.body
     console.log('Fetched Data:', data) // Check the value of data
 
-    // Transform data into an array of objects
-    const posts = data.map((item: any) => ({
-      id: item.id,
-      title: item.title,
-      description: item.description,
-      user_id: item.user_id,
-      image_url: item.image_url,
-    }))
-
-    return posts
+    if (data && Array.isArray(data.posts)) {
+      // Transform data.posts into an array of objects
+      const posts = data.posts.map((item: any) => ({
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        user_id: item.user_id,
+        image_url: item.image_url,
+      }))
+      console.log('Is data an array?', Array.isArray(data))
+      return posts
+    } else {
+      // Handle invalid response format
+      throw new Error('Invalid response format')
+    }
   })
 }
 
