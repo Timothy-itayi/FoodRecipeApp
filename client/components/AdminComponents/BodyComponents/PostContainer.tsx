@@ -3,10 +3,11 @@ import { Card, CardContent, Typography } from '@material-ui/core'
 import { getAllPosts } from '../../../apis/posts'
 import { Post } from '../../types'
 interface PostContainerProps {
-  post: Post[]
+  posts: Post[]
 }
-const PostContainer: React.FC<PostContainerProps> = ({ post: propPosts }) => {
-  const [posts, setPosts] = useState<Post[]>([])
+
+const PostContainer: React.FC<PostContainerProps> = () => {
+  const [blogs, setBlogs] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -16,8 +17,8 @@ const PostContainer: React.FC<PostContainerProps> = ({ post: propPosts }) => {
         const response: any = await getAllPosts()
         console.log('Fetched Data:', response)
 
-        if (response && Array.isArray(response.posts)) {
-          setPosts(response.posts)
+        if (response && Array.isArray(response)) {
+          setBlogs(response) // Use setBlogs instead of setPosts
         } else {
           setError('Invalid response format')
         }
@@ -33,8 +34,8 @@ const PostContainer: React.FC<PostContainerProps> = ({ post: propPosts }) => {
     fetchData()
   }, [])
 
-  console.log('State Data:', posts)
-  console.log('Is posts an array?', Array.isArray(posts))
+  console.log('State Data:', blogs) // Use blogs instead of posts
+  console.log('Is blogs an array?', Array.isArray(blogs)) // Use blogs instead of posts
 
   return (
     <>
@@ -45,24 +46,24 @@ const PostContainer: React.FC<PostContainerProps> = ({ post: propPosts }) => {
         <p>Error: {error}</p>
       ) : (
         <div>
-          {Array.isArray(posts) && posts.length > 0 ? (
-            posts.map((post) => (
-              <Card key={post.id} style={{ marginBottom: '10px' }}>
+          {Array.isArray(blogs) && blogs.length > 0 ? (
+            blogs.map((blog) => (
+              <Card key={blog.id} style={{ marginBottom: '10px' }}>
                 <CardContent>
                   <Typography
                     variant="h6"
                     component="h2"
                     style={{ marginBottom: '10px' }}
                   >
-                    {post.title}
+                    {blog.title}
                   </Typography>
                   <Typography variant="body1" style={{ marginBottom: '10px' }}>
-                    {post.description}
+                    {blog.description}
                   </Typography>
-                  {post.image_url && (
+                  {blog.image_url && (
                     <img
-                      src={post.image_url}
-                      alt={post.title}
+                      src={blog.image_url}
+                      alt={blog.title}
                       style={{
                         marginBottom: '10px',
                         maxWidth: '100%',
