@@ -34,8 +34,8 @@ const PostContainer: React.FC<PostContainerProps> = () => {
     fetchData()
   }, [])
 
-  console.log('State Data:', blogs) // Use blogs instead of posts
-  console.log('Is blogs an array?', Array.isArray(blogs)) // Use blogs instead of posts
+  // console.log('State Data:', blogs) // Use blogs instead of posts
+  // console.log('Is blogs an array?', Array.isArray(blogs)) // Use blogs instead of posts
 
   return (
     <>
@@ -48,16 +48,16 @@ const PostContainer: React.FC<PostContainerProps> = () => {
         <div>
           {Array.isArray(blogs) && blogs.length > 0 ? (
             blogs.map((blog) => (
-              <Card key={blog.id} style={{ marginBottom: '10px' }}>
+              <Card key={blog.id} style={{ marginBottom: '3px' }}>
                 <CardContent>
                   <Typography
                     variant="h6"
                     component="h2"
-                    style={{ marginBottom: '10px' }}
+                    style={{ marginBottom: '3px' }}
                   >
                     {blog.title}
                   </Typography>
-                  <Typography variant="body1" style={{ marginBottom: '10px' }}>
+                  <Typography variant="body1" style={{ marginBottom: '3px' }}>
                     {blog.description}
                   </Typography>
                   {blog.image_url && (
@@ -65,9 +65,9 @@ const PostContainer: React.FC<PostContainerProps> = () => {
                       src={blog.image_url}
                       alt={blog.title}
                       style={{
-                        marginBottom: '10px',
+                        marginBottom: '3px',
                         maxWidth: '100%',
-                        height: 'auto',
+                        height: '50',
                       }}
                     />
                   )}
