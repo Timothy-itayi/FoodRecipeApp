@@ -1,120 +1,116 @@
-// import React, { useState } from 'react'
-// import { addUser } from '../../../apis/user'
-// import { Link, useNavigate } from 'react-router-dom'
-// import UserPosts from './UserPosts'
-// import MainFeed from './MainFeed'
+import React, { useState } from 'react'
+import { addUser } from '../../../apis/user'
+import { Link, useNavigate } from 'react-router-dom'
+import { CustomUser } from '../../../App'
+import { useAuth0 } from '@auth0/auth0-react'
 
-// interface CreateUserProps {
-//   selectedIcon: string
-//   onCreateUser: (username: string, userEmail: string, userId: number) => void
-// }
+interface CreateUserProps {
+  selectedIcon: string
+  onCreateUser: (
+    username: string,
+    userEmail: string,
+    selectedIcon: string
+  ) => void
+}
 
-// const CreateUser: React.FC<CreateUserProps> = ({
-//   selectedIcon,
-//   onCreateUser,
-// }) => {
-//   const [username, setUsername] = useState('')
-//   const [userEmail, setUserEmail] = useState('')
-//   const [successMessage, setSuccessMessage] = useState(false)
-//   const [showUserPosts, setShowUserPosts] = useState(false)
-//   const [showMainFeed, setShowMainFeed] = useState(false)
-//   const [userId, setUserId] = useState<number>(0) // Add userId state
-//   const navigate = useNavigate()
+const CreateUser: React.FC<CreateUserProps> = ({
+  selectedIcon,
+  onCreateUser,
+}) => {
+  const [username, setUsername] = useState('')
+  const [userEmail, setUserEmail] = useState('')
+  const [successMessage, setSuccessMessage] = useState(false)
 
-//   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     setUsername(event.target.value)
-//   }
+  const { user } = useAuth0<CustomUser>()
 
-//   const handleUserEmailChange = (
-//     event: React.ChangeEvent<HTMLInputElement>
-//   ) => {
-//     setUserEmail(event.target.value)
-//   }
+  // Destructure the username and userEmail from the User object (if available)
+  const { username: userUsername, userEmail: userUserEmail } = user || {}
 
-//   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-//     event.preventDefault()
+  const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value)
+  }
 
-//     try {
-//       const newUser = { username, user_email: userEmail }
+  const handleUserEmailChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setUserEmail(event.target.value)
+  }
 
-//       const createdUserId = await addUser(newUser)
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
 
-//       if (createdUserId) {
-//         setUserId(createdUserId) // Set the userId
-//         console.log(createdUserId)
-//         onCreateUser(username, userEmail, createdUserId)
-//         setSuccessMessage(true)
-//         setUsername('')
-//         setUserEmail('')
-//       } else {
-//         console.error('Error creating user')
-//       }
-//     } catch (error) {
-//       console.error('Error creating user:', error)
-//     }
-//   }
+    try {
+      // Create a new user object with the required information
+      const newUser = {
+        username: username || userUsername || '', // Use the provided username or the username from the User object
+        userEmail: userEmail || userUserEmail || '', // Use the provided userEmail or the userEmail from the User object
+        selectedIcon,
+      }
 
-//   const handleMakePost = () => {
-//     setShowUserPosts(true)
-//   }
+      const createdUserId = await addUser(newUser)
 
-//   const handleShowMainFeed = () => {
-//     setShowMainFeed(true)
-//   }
+      if (createdUserId) {
+        console.log(createdUserId)
+        onCreateUser(newUser.username, newUser.userEmail, newUser.selectedIcon)
+        setSuccessMessage(true)
+        setUsername('')
+        setUserEmail('')
+      } else {
+        console.error('Error creating user')
+      }
+    } catch (error) {
+      console.error('Error creating user:', error)
+    }
+  }
 
-//   if (showUserPosts) {
-//     return <UserPosts handleCreatePost={() => {}} userId={0} posts={[]} />
-//   }
+  const handleMakePost = () => {
+    navigate(`/user/${user}/posts`)
+  }
 
-//   if (showMainFeed) {
-//     return <MainFeed posts={[]} />
-//   }
+  if (successMessage) {
+    return (
+      <div>
+        <h2>User Created!</h2>
+        <p>Thank you for adding a user.</p>
+        <p>What would you like to do next?</p>
+        <button onClick={handleMakePost}>Make a Post</button>
+      </div>
+    )
+  }
 
-//   if (successMessage) {
-//     return (
-//       <div>
-//         <h2>User Created!</h2>
-//         <p>Thank you for adding a user.</p>
-//         <p>What would you like to do next?</p>
-//         <button onClick={handleMakePost}>Make a Post</button>
-//         <button onClick={handleShowMainFeed}>Show Main Feed</button>
-//       </div>
-//     )
-//   }
+  return (
+    <div>
+      <h2>Create User</h2>
+      <div>
+        <img
+          className="selected-icon__image"
+          src={selectedIcon}
+          alt="Selected Icon"
+        />
+      </div>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          value={username}
+          onChange={handleUsernameChange}
+        />
+        <br />
+        <label htmlFor="userEmail">User Email:</label>
+        <input
+          type="email"
+          id="userEmail"
+          value={userEmail}
+          onChange={handleUserEmailChange}
+        />
+        <br />
+        <button className="login-button" type="submit">
+          Create User
+        </button>
+      </form>
+    </div>
+  )
+}
 
-//   return (
-//     <div>
-//       <h2>Create User</h2>
-//       <div>
-//         <img
-//           className="selected-icon__image"
-//           src={selectedIcon}
-//           alt="Selected Icon"
-//         />
-//       </div>
-//       <form onSubmit={handleSubmit}>
-//         <label htmlFor="username">Username:</label>
-//         <input
-//           type="text"
-//           id="username"
-//           value={username}
-//           onChange={handleUsernameChange}
-//         />
-//         <br />
-//         <label htmlFor="userEmail">User Email:</label>
-//         <input
-//           type="email"
-//           id="userEmail"
-//           value={userEmail}
-//           onChange={handleUserEmailChange}
-//         />
-//         <br />
-//         <button className="login-button" type="submit">
-//           Create User
-//         </button>
-//       </form>
-//     </div>
-//   )
-// }
-
-// export default CreateUser
+export default CreateUser
