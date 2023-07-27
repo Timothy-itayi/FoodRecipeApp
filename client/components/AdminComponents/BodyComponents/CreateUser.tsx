@@ -1,13 +1,8 @@
 import React, { useState } from 'react'
-import { addUser } from '../../../apis/user'
 
 interface CreateUserProps {
   selectedIcon: string
-  onCreateUser: (
-    username: string,
-    userEmail: string,
-    selectedIcon: string
-  ) => void
+  onCreateUser: (username: string, userEmail: string) => void
 }
 
 const CreateUser: React.FC<CreateUserProps> = ({
@@ -22,11 +17,8 @@ const CreateUser: React.FC<CreateUserProps> = ({
     event.preventDefault()
 
     try {
-      // Call the API to add the user
-      await addUser({ username, user_email: userEmail })
-
       // Call the prop with the required arguments
-      onCreateUser(username, userEmail, selectedIcon)
+      onCreateUser(username, userEmail)
 
       // Show the success message and reset the form fields
       setSuccessMessage(true)
@@ -51,7 +43,7 @@ const CreateUser: React.FC<CreateUserProps> = ({
     return (
       <div>
         <h2>User Created!</h2>
-        <p>Thank you for adding a user.</p>
+        <p>Thank you for adding {username}.</p>
       </div>
     )
   }
