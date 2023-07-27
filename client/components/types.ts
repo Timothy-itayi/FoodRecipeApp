@@ -17,3 +17,11 @@ export interface CustomUser {
   user_email: string
   selectedIcon: string
 }
+export type CreateUserProps = {
+  selectedIcon: string
+  onCreateUser: (
+    username: string,
+    user_email: string,
+    selectedIcon: string
+  ) => void
+}

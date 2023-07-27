@@ -8,9 +8,8 @@ import { Post } from './components/types'
 import PostContainer from './components/AdminComponents/BodyComponents/PostContainer'
 import UserPosts from './components/AdminComponents/BodyComponents/UserPosts'
 import UserProfile from './components/AdminComponents/BodyComponents/UserProfile'
-import { addUser, fetchUsers } from './apis/user'
+import { addUser } from './apis/user'
 import { getAllPosts, addNewPost } from './apis/posts'
-
 const App: React.FC = () => {
   const { isLoading, isAuthenticated, user } = useAuth0<User>()
   const [selectedIcon, setSelectedIcon] = useState<string>('')
@@ -23,18 +22,13 @@ const App: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]) // Initialize users state with an empty array
 
   useEffect(() => {
-    // Fetch posts and users data when the component mounts
+    // Fetch posts data when the component mounts
     const fetchData = async () => {
       try {
-        const [postsData, usersData] = await Promise.all([
-          getAllPosts(),
-          fetchUsers(),
-        ])
-
+        const postsData = await getAllPosts()
         setPosts(postsData)
-        setUsers(usersData)
       } catch (error) {
-        console.error('Error fetching data:', error)
+        console.error('Error fetching posts:', error)
       }
     }
 
@@ -46,22 +40,21 @@ const App: React.FC = () => {
     user_email: string,
     selectedIcon: string
   ): Promise<void> => {
-    // Assuming the API call to add the user is successful and returns the new user data
-    const newUser: User = {
-      // Remove the id and userIdCounter, let the API assign the ID
-      name: username,
-      email: user_email,
-      picture: selectedIcon,
-      // Add any other properties you need from the user object
-    }
-
-    // Add the new user to the users state
-    setUsers((prevUsers) => [...prevUsers, newUser])
-
     try {
+      console.log('handleCreateUser function called.')
       // Call the API to add the user
       await addUser({ username, user_email: user_email })
-      console.log('user added successfully', username)
+      console.log('added', username, ' successfully')
+
+      // Assuming the API call to add the user is successful and returns the new user data
+      const newUser: User = {
+        name: username,
+        email: user_email,
+        picture: selectedIcon,
+        // Add any other properties you need from the user object
+      }
+
+      // Add the new user to the users state
     } catch (error) {
       console.error('Error creating user:', error)
     }

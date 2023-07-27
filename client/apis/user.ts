@@ -10,19 +10,6 @@ export function getUser(id: number): Promise<User | null> {
       return res.body.user
     })
 }
-export async function fetchUsers(): Promise<User[]> {
-  try {
-    const response = await request.get(rootUrl)
-    const users = response.body
-    console.log(users) // Check the value of users
-
-    // Assuming the response includes an array of user objects, you can directly return it
-    return users
-  } catch (error) {
-    console.error('Error fetching users:', error)
-    throw error
-  }
-}
 
 export async function addUser(newUser: User): Promise<number | null> {
   try {
