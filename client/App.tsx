@@ -8,7 +8,7 @@ import { Post } from './components/types'
 import PostContainer from './components/AdminComponents/BodyComponents/PostContainer'
 import UserPosts from './components/AdminComponents/BodyComponents/UserPosts'
 import UserProfile from './components/AdminComponents/BodyComponents/UserProfile'
-import { fetchUsers } from './apis/user'
+import { addUser, fetchUsers } from './apis/user'
 import { getAllPosts, addNewPost } from './apis/posts'
 
 const App: React.FC = () => {
@@ -41,7 +41,33 @@ const App: React.FC = () => {
     fetchData()
   }, []) // Empty dependency array to run the effect only once when the component mounts
 
-  // Initialize the counter to 1
+  const handleCreateUser = async (
+    username: string,
+    user_email: string,
+    selectedIcon: string
+  ): Promise<void> => {
+    // Assuming the API call to add the user is successful and returns the new user data
+    const newUser: User = {
+      // Remove the id and userIdCounter, let the API assign the ID
+      name: username,
+      email: user_email,
+      picture: selectedIcon,
+      // Add any other properties you need from the user object
+    }
+
+    // Add the new user to the users state
+    setUsers((prevUsers) => [...prevUsers, newUser])
+
+    try {
+      // Call the API to add the user
+      await addUser({ username, user_email: user_email })
+      console.log('user added successfully', username)
+    } catch (error) {
+      console.error('Error creating user:', error)
+    }
+
+    // You can perform any additional operations here, such as showing a success message or refreshing the posts data.
+  }
 
   return (
     <>
@@ -57,9 +83,9 @@ const App: React.FC = () => {
           />
           <PostContainer posts={posts} />
           <UserPosts
-            User={user}
-            handleCreatePost={addNewPost} // Assuming addNewPost is the correct function to add new posts
-            id={user?.sub || ''} // Use the 'sub' property from the user object as the ID, or an empty string as a fallback
+            user={user} // Pass the user object instead of User prop
+            handleCreatePost={addNewPost}
+            id={user?.sub || ''}
             username={user?.name || ''}
             user_email={user?.email || ''}
             posts={posts}
