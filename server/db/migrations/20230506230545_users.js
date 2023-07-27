@@ -3,6 +3,7 @@ exports.up = function (knex) {
     table.increments('id').primary()
     table.string('username')
     table.string('user_email')
+    table.string('selectedIcon')
   })
 }
 

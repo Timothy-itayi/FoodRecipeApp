@@ -11,3 +11,9 @@ export interface User {
   username: string
   user_email: string
 }
+export interface CustomUser {
+  id: number
+  username: string
+  user_email: string
+  selectedIcon: string
+}

@@ -1,22 +1,16 @@
 import React, { useState, ChangeEvent } from 'react'
-import { addNewPost, updatePost, deletePost } from '../../../apis/posts'
-import { Post, User } from '../../types'
-import { users } from '../../../../models/users'
+import { addNewPost } from '../../../apis/posts'
+import { CustomUser, Post } from '../../types'
 
 interface UserPostsProps {
   handleCreatePost: (newPostWithUserId: Post) => void
-  User: users
-  id: number
-  username: string
-  user_email: string
-
-  posts: Post[] // Add posts prop
+  user: CustomUser // Use the CustomUser type instead of User
+  posts: Post[]
 }
+
 const UserPosts: React.FC<UserPostsProps> = ({
   handleCreatePost,
-  id,
-  username,
-  user_email,
+  user,
   posts,
 }) => {
   const [newPost, setNewPost] = useState<Post>({
@@ -37,7 +31,7 @@ const UserPosts: React.FC<UserPostsProps> = ({
 
   const handleCreateButtonClick = async () => {
     try {
-      const newPostWithUserId = { ...newPost, userId: id }
+      const newPostWithUserId = { ...newPost, user_id: user.id } // Assuming user.id is the user's unique identifier
       const newPostId = await addNewPost(newPostWithUserId)
       console.log(
         'New post added successfully. newPostwithUserId:',
@@ -72,14 +66,6 @@ const UserPosts: React.FC<UserPostsProps> = ({
         onChange={handleDescriptionChange}
       />
       <button onClick={handleCreateButtonClick}>Create Post</button>
-
-      <h3>Posts</h3>
-      {posts.map((post) => (
-        <div key={post.id}>
-          <h4>{post.title}</h4>
-          <p>{post.description}</p>
-        </div>
-      ))}
     </div>
   )
 }
