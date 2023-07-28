@@ -6,7 +6,7 @@ const rootUrl = '/api/v1/posts'
 export function getAllPosts(): Promise<Post[]> {
   return request.get(rootUrl).then((res) => {
     const data = res.body
-    console.log('Fetched Data:', data) // Check the value of data
+    // Check the value of data
 
     if (data && Array.isArray(data.posts)) {
       // Transform data.posts into an array of objects
